@@ -11,6 +11,6 @@ nav li {
   margin-right: 10px;
 }
 
-body {
-  font-family: "VT323";
+body h1, h2, nav {
+  font-family: "VT323", monospace;
 }
