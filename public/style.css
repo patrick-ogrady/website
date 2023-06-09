@@ -37,7 +37,7 @@ h2 {
 }
 
 h3 {
-  font-size: min(6vw, 30px);
+  font-size: min(6vw, 36px);
 }
 
 @media screen and (max-width: 768px) {
@@ -47,11 +47,11 @@ h3 {
 }
 
 body {
-  font-size: min(4vw, 20px);
+  font-size: min(4vw, 24px);
 }
 
 @media screen and (max-width: 768px) {
   body {
-    font-size: min(4vw, 48px);
+    font-size: min(4vw, 56px);
   }
 }
