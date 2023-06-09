@@ -15,6 +15,18 @@ body h1, h2, nav {
   font-family: "VT323", monospace;
 }
 
+h1 {
+  font-size: clamp(19px, 4em, 38px);
+}
+
+h2 {
+  font-size: clamp(14px, 3em, 29px);
+}
+
+nav {
+  font-size: clamp(12px, 2.5em, 24px);
+}
+
 a {
   text-decoration: none;
 }
