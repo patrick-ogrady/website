@@ -1,21 +1,57 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
-h1, h2, h3 {
-  font-family: "VT323";
+body {
+  font-family: "VT323", monospace;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style-type: square;
+}
+
+li {
+  margin-bottom: 10px;
 }
 
 h1 {
   font-size: min(9vw, 70px);
 }
 
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: min(9vw, 128px);
+  }
+}
+
 h2 {
   font-size: min(7vw, 50px);
 }
 
-h3 {
-  font-size: min(6vw, 30px);
+@media screen and (max-width: 768px) {
+  h2 {
+    font-size: min(7vw, 96px);
+  }
 }
 
-a {
-  text-decoration: none;
+h3 {
+  font-size: min(6vw, 36px);
+}
+
+@media screen and (max-width: 768px) {
+  h3 {
+    font-size: min(6vw, 72px);
+  }
+}
+
+body {
+  font-size: min(4vw, 24px);
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    font-size: min(4vw, 56px);
+  }
 }
