@@ -4,18 +4,46 @@ h1, h2, h3 {
   font-family: "VT323";
 }
 
+a {
+  text-decoration: none;
+}
+
 h1 {
   font-size: min(9vw, 70px);
+}
+
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: min(9vw, 128px);
+  }
 }
 
 h2 {
   font-size: min(7vw, 50px);
 }
 
+@media screen and (max-width: 768px) {
+  h2 {
+    font-size: min(7vw, 96px);
+  }
+}
+
 h3 {
   font-size: min(6vw, 30px);
 }
 
-a {
-  text-decoration: none;
+@media screen and (max-width: 768px) {
+  h3 {
+    font-size: min(6vw, 64px);
+  }
+}
+
+body {
+  font-size: min(4vw, 20px);
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    font-size: min(4vw, 32px);
+  }
 }
