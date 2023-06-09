@@ -14,3 +14,7 @@ nav li {
 body h1, h2, nav {
   font-family: "VT323", monospace;
 }
+
+a {
+  text-decoration: none;
+}
