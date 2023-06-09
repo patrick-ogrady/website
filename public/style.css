@@ -1,11 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
-h1, h2, h3 {
-  font-family: "VT323";
+body {
+  font-family: "VT323", monospace;
 }
 
 a {
   text-decoration: none;
+}
+
+ul {
+  list-style-type: square;
 }
 
 li {
