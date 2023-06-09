@@ -1,16 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
-nav ul {
-  display: flex;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+h1, h2, h3 {
+  font-family: "VT323";
 }
 
-nav li {
-  margin-right: 10px;
+h1 {
+  font-size: min(9vw, 70px);
 }
 
-body h1, h2, nav {
-  font-family: "VT323", monospace;
+h2 {
+  font-size: min(7vw, 50px);
+}
+
+h3 {
+  font-size: min(6vw, 30px);
+}
+
+a {
+  text-decoration: none;
 }
