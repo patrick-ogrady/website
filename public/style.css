@@ -8,6 +8,10 @@ a {
   text-decoration: none;
 }
 
+li {
+  margin-bottom: 10px;
+}
+
 h1 {
   font-size: min(9vw, 70px);
 }
