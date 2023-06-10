@@ -22,7 +22,7 @@ h1 {
 
 @media screen and (max-width: 768px) {
   h1 {
-    font-size: min(9vw, 128px);
+    font-size: 2em;
   }
 }
 
@@ -32,7 +32,7 @@ h2 {
 
 @media screen and (max-width: 768px) {
   h2 {
-    font-size: min(7vw, 96px);
+    font-size: 1.75em;
   }
 }
 
@@ -42,7 +42,7 @@ h3 {
 
 @media screen and (max-width: 768px) {
   h3 {
-    font-size: min(6vw, 80px);
+    font-size: 1.5em;
   }
 }
 
@@ -52,6 +52,6 @@ body {
 
 @media screen and (max-width: 768px) {
   body {
-    font-size: min(4vw, 64px);
+    font-size: 1.25em;
   }
 }
