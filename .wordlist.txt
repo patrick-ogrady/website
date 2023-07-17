@@ -43,7 +43,6 @@ litevm
 LiteVM
 Mainnet
 MerkleDB
-nspaces
 O'Grady
 patrickogrady
 Precompiles
