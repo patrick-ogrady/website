@@ -1,4 +1,15 @@
 matrix:
 - name: html
+  pipeline:
+  - pyspelling.filters.html:
+      comments: true
+      attributes:
+      - title
+      - alt
+      ignores:
+      - :matches(code, pre)
+      - a:matches(.magiclink-compare, .magiclink-commit)
+      - span.keys
+      - :matches(.MathJax_Preview, .md-nav__link, .md-footer-custom-text, .md-source__repository, .headerlink, .md-icon)
   sources:
   - public/*.html
