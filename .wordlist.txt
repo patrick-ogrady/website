@@ -32,7 +32,7 @@ HyperSDK
 HyperSDKJournal
 HyperVM
 IBC
-IC3
+IC
 Incentivized
 indexvm
 IndexVM
