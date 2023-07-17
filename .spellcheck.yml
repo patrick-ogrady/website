@@ -1,0 +1,4 @@
+matrix:
+- name: html
+  sources:
+  - public/*.html
