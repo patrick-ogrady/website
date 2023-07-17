@@ -1,5 +1,9 @@
 matrix:
 - name: html
+  dictionary:
+    wordlists:
+    - .wordlist.txt
+    encoding: utf-8
   pipeline:
   - pyspelling.filters.html:
       comments: true
