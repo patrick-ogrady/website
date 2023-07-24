@@ -52,6 +52,7 @@ PrecompileVM
 ProposerVM
 PRs
 RandomParty
+relayer
 rosetta
 Scalable
 SDK
