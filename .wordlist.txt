@@ -10,6 +10,7 @@ BLS
 CLI
 cli
 CLOB
+Codec
 Coinbase
 coinbase
 Cortina
@@ -47,6 +48,7 @@ MorpheusVM
 namespaces
 O'Grady
 patrickogrady
+Pre
 Precompiles
 PrecompileVM
 ProposerVM
