@@ -49,6 +49,7 @@ namespaces
 O'Grady
 patrickogrady
 Pre
+Precompile
 Precompiles
 PrecompileVM
 ProposerVM
