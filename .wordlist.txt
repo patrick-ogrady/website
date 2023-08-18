@@ -77,6 +77,7 @@ VM
 VMs
 VRF
 WAGMI
+WASM
 WebSocket
 Windower
 xyz
