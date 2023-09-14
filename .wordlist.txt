@@ -18,6 +18,7 @@ Cortina
 Crypto
 crypto
 Cryptocito
+Demeo
 Devnet
 EIP
 Emin
@@ -48,6 +49,7 @@ MerkleDB
 MorpheusVM
 namespaces
 O'Grady
+OhMyWarp
 patrickogrady
 Pre
 Precompile
