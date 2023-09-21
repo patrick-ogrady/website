@@ -1,4 +1,5 @@
 ava
+ArchiveDB
 AvalancheGo
 AWM
 Banff
@@ -71,6 +72,7 @@ Subnet
 subnet
 Subnets
 subnets
+Teleporter
 TokenVM
 Trilemma
 validator's
