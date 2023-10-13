@@ -19,6 +19,7 @@ Cortina
 Crypto
 crypto
 Cryptocito
+Cryptocopia
 Demeo
 Devnet
 EIP
