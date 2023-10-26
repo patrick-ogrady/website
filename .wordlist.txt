@@ -34,6 +34,7 @@ gRPC
 Gün
 hackmd
 hypersdk
+Hivenet
 HyperSDK
 HyperSDKJournal
 HyperVM
@@ -63,6 +64,7 @@ PRs
 RandomParty
 relayer
 rosetta
+Recommender
 Scalable
 SDK
 sdk
