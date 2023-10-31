@@ -1,6 +1,7 @@
 # [DRAFT PROPOSAL] The Path to 100k Subnets: Overhauling the Relationship between the Avalanche Primary Network and Subnets
 
-_Originally [posted to ACP GitHub Discussions](https://github.com/avalanche-foundation/ACPs/discussions/10#discussioncomment-7373486) on 10/24/23_
+* [Posted to ACP GitHub Discussions](https://github.com/avalanche-foundation/ACPs/discussions/10#discussioncomment-7373486) on 10/24/23
+* [Proposed as ACP-13](https://github.com/avalanche-foundation/ACPs/blob/main/ACPs/13-subnet-only-validators.md) on 10/31/23
 
 Over the last few months, I've spent a lot of time thinking about what changes could be adopted on the Avalanche Network to make Subnets even more attractive to developers (especially new startups/ecosystems just getting started).
 
@@ -46,7 +47,7 @@ _The rate of nAVAX/second should be set by the demand for validating Subnets on 
 
 Currently, the only way to secure an Elastic Subnet is to stake its staking token. Many have requested the option to use \$AVAX for this token, however, this could easily allow an adversary to takeover small Elastic Subnets (where the amount of \$AVAX staked may be much less than the circulating supply).
 
-\$AVAX-Augmented Subnet Security would allow anyone holding \$AVAX to lock it to specific Subnet Validators and earn Elastic Subnet reward tokens for supporting honest participants. Recall, all stake management on the Avalanche Network (even for Subnets) occurs on the P-Chain. Thus, staked tokens (\$AVAX and/or custom staking tokens used in Elastic Subnets) and stake weights (used for AWM verification) are secured by the full \\$AVAX stake of the Primary Network. \$AVAX-Augmented Subnet Security, like staking, would be implemented on the P-Chain and enjoy the full security of the Primary Network. This approach means locking \$AVAX occurs on the Primary Network (no need to transfer \$AVAX to a Subnet, which may not be secured by meaningful value yet) and proofs of malicious behavior are processed on the Primary Network (a colluding Subnet could otherwise chose not to process a proof that would lead to their "lockers" being slashed).
+\$AVAX-Augmented Subnet Security would allow anyone holding \$AVAX to lock it to specific Subnet Validators and earn Elastic Subnet reward tokens for supporting honest participants. Recall, all stake management on the Avalanche Network (even for Subnets) occurs on the P-Chain. Thus, staked tokens (\$AVAX and/or custom staking tokens used in Elastic Subnets) and stake weights (used for AWM verification) are secured by the full \$AVAX stake of the Primary Network. \$AVAX-Augmented Subnet Security, like staking, would be implemented on the P-Chain and enjoy the full security of the Primary Network. This approach means locking \$AVAX occurs on the Primary Network (no need to transfer \$AVAX to a Subnet, which may not be secured by meaningful value yet) and proofs of malicious behavior are processed on the Primary Network (a colluding Subnet could otherwise chose not to process a proof that would lead to their "lockers" being slashed).
 
 _This approach is comparable to the idea of using \$ETH to secure DA on [EigenLayer](https://www.eigenlayer.xyz/) (without reusing stake) or \$BTC to secure Cosmos Zones on [Babylon](https://babylonchain.io/) (but not using an external ecosystem)._
 
