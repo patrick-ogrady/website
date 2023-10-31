@@ -1,4 +1,5 @@
 ava
+ACP
 ArchiveDB
 AvalancheGo
 AWM
@@ -67,6 +68,7 @@ rosetta
 Recommender
 Scalable
 SDK
+SOVs
 sdk
 Sirer
 spacesvm
