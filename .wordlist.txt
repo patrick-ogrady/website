@@ -91,3 +91,5 @@ WASM
 WebSocket
 Windower
 xyz
+Prefetching
+Trie
