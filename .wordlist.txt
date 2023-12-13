@@ -2,6 +2,7 @@ ava
 ACP
 ArchiveDB
 AvalancheGo
+Auth
 AWM
 Banff
 BlobVM
