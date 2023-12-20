@@ -97,3 +97,5 @@ Prefetching
 Trie
 EIPs
 Stakers
+Appchains
+Sekniqi
