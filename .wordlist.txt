@@ -24,6 +24,7 @@ Cryptocito
 Cryptocopia
 Demeo
 Devnet
+Durango
 EIP
 Emin
 Ep
