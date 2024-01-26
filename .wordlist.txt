@@ -100,3 +100,4 @@ EIPs
 Stakers
 Appchains
 Sekniqi
+Vryx
