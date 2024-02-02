@@ -1,7 +1,5 @@
 # Vryx: Fortifying Decoupled State Machine Replication
 
-[Video](https://www.youtube.com/live/0V3YhC6fgtg?si=DedXsQEesbCLEifr)([Slides](https://docs.google.com/presentation/d/1Qj0USUmKvrU0RgGFVgpMQ1T4JU0pXUROAFZuOtZmrWQ/edit?usp=sharing))
-
 > Vryx is an extension of previous research on scaling throughput in the HyperSDK \[[Agreeing on Execution Inputs, Not Execution Results](https://x.com/_patrickogrady/status/1673372491333640192)\] and familiarity with that work, and the open questions it presents, provides useful context around the motivation for this work.
 
 ## Overview
@@ -12,7 +10,7 @@ This newly rediscovered approach of "decoupling" State Machine Replication (DSMR
 
 Vryx, a fortified DSMR construction that will be employed by the [Avalanche HyperSDK](https://github.com/ava-labs/hypersdk) and eventually other Avalanche Virtual Machines, mitigates these adversarial issuance attacks for profit-maximizing builders and ensures that any transactions they replicate must pay fees, restoring fTPS = rTPS. Vryx thus enables the HyperSDK to take full advantage of DSMR pipelining without sacrificing the robustness of traditional SMR, which can enforce full syntactic and semantic verification. Because Vryx only introduces additive constraints to DSMR replication and execution (and does not require any changes to consensus), most of its techniques could be incorporated into previously proposed and adopted DSMR constructions to defend against adversarial users.
 
-> If you prefer long-form video to text, check out the [Vryx Overview on YouTube](https://www.youtube.com/live/0V3YhC6fgtg?si=DedXsQEesbCLEifr).
+> If you prefer long-form video to text, check out the [Vryx Overview on YouTube](https://www.youtube.com/live/0V3YhC6fgtg?si=DedXsQEesbCLEifr) ([Slides](https://docs.google.com/presentation/d/1Qj0USUmKvrU0RgGFVgpMQ1T4JU0pXUROAFZuOtZmrWQ/edit?usp=sharing)).
 
 ## Making the Case for Decoupled State Machine Replication (DSMR)
 
