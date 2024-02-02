@@ -1,5 +1,7 @@
 # Vryx: Fortifying Decoupled State Machine Replication
 
+[Video](https://www.youtube.com/live/0V3YhC6fgtg?si=DedXsQEesbCLEifr)([Slides](https://docs.google.com/presentation/d/1Qj0USUmKvrU0RgGFVgpMQ1T4JU0pXUROAFZuOtZmrWQ/edit?usp=sharing))
+
 > Vryx is an extension of previous research on scaling throughput in the HyperSDK \[[Agreeing on Execution Inputs, Not Execution Results](https://x.com/_patrickogrady/status/1673372491333640192)\] and familiarity with that work, and the open questions it presents, provides useful context around the motivation for this work.
 
 ## Overview
@@ -9,6 +11,8 @@ Over the last few years, multiple teams have produced experimental results showi
 This newly rediscovered approach of "decoupling" State Machine Replication (DSMR), previously detailed by \[[Separating agreement from execution for byzantine fault tolerant services](https://dl.acm.org/doi/10.1145/1165389.945470)\] and \[[BASE: Using Abstraction to Improve Fault Tolerance](https://pmg.csail.mit.edu/bft/rodrigues01base-abstract.html)\] in the early 2000s, is not without tradeoffs. As a consequence of performing replication prior to sequencing and execution, it is no longer possible to enforce semantic verification of replicated transactions. Let us refer to the number of Replicated Transactions Per Second (whether or not fee-paying/executable) as rTPS, the number of Fee-Paying Transactions Per Second as fTPS, and the number of Invalid Transactions Per Second as iTPS (rTPS - fTPS). This means that the fTPS of DSMR constructions can be far less than rTPS, causing participants to waste valuable resources replicating and verifying invalid transactions (iTPS = rTPS - fTPS). **Adversarial issuers (users) employing a mix of cost-effective tactics on a realistic DSMR model can exploit this tradeoff to reduce fTPS to less than 1% of rTPS.**
 
 Vryx, a fortified DSMR construction that will be employed by the [Avalanche HyperSDK](https://github.com/ava-labs/hypersdk) and eventually other Avalanche Virtual Machines, mitigates these adversarial issuance attacks for profit-maximizing builders and ensures that any transactions they replicate must pay fees, restoring fTPS = rTPS. Vryx thus enables the HyperSDK to take full advantage of DSMR pipelining without sacrificing the robustness of traditional SMR, which can enforce full syntactic and semantic verification. Because Vryx only introduces additive constraints to DSMR replication and execution (and does not require any changes to consensus), most of its techniques could be incorporated into previously proposed and adopted DSMR constructions to defend against adversarial users.
+
+> If you prefer long-form video to text, check out the [Vryx Overview on YouTube](https://www.youtube.com/live/0V3YhC6fgtg?si=DedXsQEesbCLEifr).
 
 ## Making the Case for Decoupled State Machine Replication (DSMR)
 
