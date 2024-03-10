@@ -2,6 +2,11 @@
 
 > Vryx is an extension of previous research on scaling throughput in the HyperSDK \[[Agreeing on Execution Inputs, Not Execution Results](https://x.com/_patrickogrady/status/1673372491333640192)\] and familiarity with that work, and the open questions it presents, provides useful context around the motivation for this work.
 
+## TODO
+* In a system where you want to increase consensus participants without increasing capacity, only allow top N validators to produce chunks
+* Just push chunk headers to peers and provide a cached/CDN URL to fetch from a more scalable netwokring layer
+* FAQs from feedback (ex: can't enforce a global priority order in a block)
+
 ## Overview
 
 Over the last few years, multiple teams have produced experimental results showing that decoupling transaction replication, sequencing, and execution can significantly increase blockchain throughput \[[Flow: Separating Consensus and Compute -- Block Formation and Execution](https://arxiv.org/abs/2002.07403)\]\[[Narwhal and Tusk: A DAG-based Mempool and Efficient BFT Consensus](https://arxiv.org/abs/2105.11827)\]\[[Bullshark: DAG BFT Protocols Made Practical](https://arxiv.org/abs/2201.05677)\]\[[Shoal: Improving DAG-BFT Latency And Robustness](https://arxiv.org/abs/2306.03058)\]\[[Sui Lutris: A Blockchain Combining Broadcast and Consensus](https://arxiv.org/abs/2310.18042)\]\[[BBCA-CHAIN: One-Message, Low Latency BFT Consensus on a DAG](https://arxiv.org/abs/2310.06335)\]\[[Mir-BFT: High-Throughput Robust BFT for Decentralized Networks](https://arxiv.org/abs/1906.05552)\]\[[Mysticeti: Low-Latency DAG Consensus with Fast Commit Path](https://arxiv.org/abs/2310.14821)\]\[[Aleph: Efficient Atomic Broadcast in Asynchronous Networks with Byzantine Nodes](https://arxiv.org/abs/1908.05156)\]. Unlike "traditional" blockchains (like Bitcoin) where syntactically and semantically valid transactions are sequenced, executed, and replicated simultaneously in each block, these decoupled constructions are able to better [pipeline](https://en.wikipedia.org/wiki/Pipeline_(computing)) [State Machine Replication (SMR)](https://decentralizedthoughts.github.io/2019-12-06-dce-the-three-scalability-bottlenecks-of-state-machine-replication) by disseminating, ordering, and verifying transactions independently.
