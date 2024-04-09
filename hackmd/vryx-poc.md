@@ -2,6 +2,8 @@
 
 <100k Sustained Image>
 
+Don't believe me? You can reproduce it here with a single command: <TODO>
+
 ## Task
 * 10M Accounts
 * 1M Unique Accounts Active per 60s (~60k state changes per second)
