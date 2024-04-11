@@ -22,6 +22,7 @@ we get hit our throughput targets in a multi-regional setting.
 
 * Finalized Transaction Data = ~20MB/s
   * bandwidth used by each node is 20MB/s inbound and 20MB/s outbound (bandwidth dominated by chunk distribution which is symmetric)
+    * TODO: amount is less than this to the node because of compression
   * at no point does any validator exceed 21MB/s of inbound/outbound bandwidth (no hotspots)
 * TTC Tx Attested (once tx is on validator) = 230ms
 * Time-to-Chunk Attestation (Issuer -> API -> Validator -> Chunk Attested) = 125ms + 125ms + 230ms = ~480ms
