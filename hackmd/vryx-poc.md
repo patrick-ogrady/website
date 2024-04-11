@@ -6,6 +6,8 @@
 
 Don't believe me? You can reproduce it here with a single command: <TODO>
 
+Sustained for X hrs (could keep going, no increase in disk)
+
 ## Task
 * 10M Accounts
 * ~2.5M Unique Accounts Active per 60s (~100k state changes per second)
@@ -14,7 +16,7 @@ Don't believe me? You can reproduce it here with a single command: <TODO>
 * Historical blocks/chunks pruned after depth of 512
 
 ## Setup
-* c7g.8xlarge (32 vCPU, 64GB RAM, 100GB io2 EBS with 1500 IOPS)
+* c7g.8xlarge (32 vCPU, 64GB RAM, 100GB io2 EBS with 2000 IOPS)
 * 5 Regions (us-west-2,us-east-1,ap-south-1,ap-northeast-1,eu-west-1)
 * 25 Equal Weight Validators (5 in each region)
 * 5 API Nodes (1 in each region)
