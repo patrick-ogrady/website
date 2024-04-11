@@ -47,7 +47,7 @@ Yes.
 Not included:
 * Bonds/Freezing
 
-### Open Question: MerkleDB or AppendDB (TODO: new name)
+### Open Question: MerkleDB or Vilmo 
 
 Instead of merklizing state, we checksum state. This allows for verification of execution and for fast syncing but does not allow proof generation against state.
 
