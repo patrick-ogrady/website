@@ -8,12 +8,16 @@ Don't believe me? You can reproduce it here with a single command: <TODO>
 
 Sustained for X hrs (could keep going, no increase in disk)
 
+Is this maxxed out? no.
+
 ## Task
 * 10M Accounts
 * ~2.5M Unique Accounts Active per 60s (~100k state changes per second)
 * Zipf Distribution of Acitvity (s=1.0001 v=2.7)
 * Simple Transfers using ED25519 Keys
 * Historical blocks/chunks pruned after depth of 512
+
+* Finalized Transaction Data = ~20MB/s
 * TTC Tx Attested (once tx is on validator) = 230ms
 * Time-to-Chunk Attestation (Issuer -> API -> Validator -> Chunk Attested) = 125ms + 125ms + 230ms = ~480ms
 * Time-to-Finality = 2.4-2.9s (1s block time)
