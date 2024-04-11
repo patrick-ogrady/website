@@ -15,7 +15,7 @@ Sustained for X hrs (could keep going, no increase in disk)
 * Simple Transfers using ED25519 Keys
 * Historical blocks/chunks pruned after depth of 512
 * TTC Tx Attested (once tx is on validator) = 230ms
-* Time-to-Chunk Inclusion (Issuer -> API -> Validator Confirmed) = 125ms + 125ms + 230ms = ~480ms
+* Time-to-Chunk Attestation (Issuer -> API -> Validator -> Chunk Attested) = 125ms + 125ms + 230ms = ~480ms
 * Time-to-Finality = 2.4-2.9s (1s block time)
 * Time-to-Execution (TTF + TTE) = 3-3.5s
 * 0% expiry/failure rate
