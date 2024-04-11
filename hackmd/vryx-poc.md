@@ -8,7 +8,10 @@ Don't believe me? You can reproduce it here with a single command: <TODO>
 
 Sustained for X hrs (could keep going, no increase in disk)
 
-Is this maxxed out? no.
+> Is this maxxed out?
+
+no. this viability exercise was just undertaken to test out our assumptions and ensure
+we get hit our throughput targets in a multi-regional setting.
 
 ## Task
 * 10M Accounts
