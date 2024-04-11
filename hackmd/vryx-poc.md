@@ -14,6 +14,8 @@ Sustained for X hrs (could keep going, no increase in disk)
 * Zipf Distribution of Acitvity (s=1.0001 v=2.7)
 * Simple Transfers using ED25519 Keys
 * Historical blocks/chunks pruned after depth of 512
+* TTC Tx Attested (once tx is on validator) = 200 ms
+* TTE (TTF + TTE) = x ms
 
 ## Setup
 * c7g.8xlarge (32 vCPU, 64GB RAM, 100GB io2 EBS with 2000 IOPS)
