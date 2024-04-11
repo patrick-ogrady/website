@@ -14,9 +14,9 @@ Sustained for X hrs (could keep going, no increase in disk)
 * Zipf Distribution of Acitvity (s=1.0001 v=2.7)
 * Simple Transfers using ED25519 Keys
 * Historical blocks/chunks pruned after depth of 512
-* TTC Tx Attested (once tx is on validator) = 0.2s
-* Time-to-Chunk Inclusion (Issuer -> API -> Validator Confirmed) = 150ms + 150ms + 200ms = 500-700ms
-* Time-to-Finality = 2.4-2.9s
+* TTC Tx Attested (once tx is on validator) = 230ms
+* Time-to-Chunk Inclusion (Issuer -> API -> Validator Confirmed) = 125ms + 125ms + 230ms = ~480ms
+* Time-to-Finality = 2.4-2.9s (1s block time)
 * Time-to-Execution (TTF + TTE) = 3-3.5s
 * 0% expiry/failure rate
 
