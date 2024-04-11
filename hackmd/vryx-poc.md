@@ -18,6 +18,7 @@ Is this maxxed out? no.
 * Historical blocks/chunks pruned after depth of 512
 
 * Finalized Transaction Data = ~20MB/s
+  * bandwidth used by each node is 20MB/s inbound and 20MB/s outbound (bandwidth dominated by chunk distribution which is symmetric)
 * TTC Tx Attested (once tx is on validator) = 230ms
 * Time-to-Chunk Attestation (Issuer -> API -> Validator -> Chunk Attested) = 125ms + 125ms + 230ms = ~480ms
 * Time-to-Finality = 2.4-2.9s (1s block time)
