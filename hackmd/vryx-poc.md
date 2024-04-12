@@ -35,7 +35,7 @@ we get hit our throughput targets in a multi-regional setting.
 * Time-to-Chunk Attestation (Issuer -> API -> Validator -> Chunk Attested) = 125ms + 125ms + 230ms = ~480ms
 * Time-to-Finality = 2.4-2.9s (1s block time)
 * Time-to-Execution (TTF + TTE) = 3-3.5s
-* 0% expiry/failure rate
+* 0% expiry/failure rate for transactions, chunks, and blocks
 
 ## Setup
 * c7g.8xlarge (32 vCPU, 64GB RAM, 100GB io2 EBS with 2000 IOPS)
