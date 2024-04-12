@@ -4,6 +4,8 @@
 
 <100k Sustained Image>
 
+<TODO: link to deploy video>
+
 Don't believe me? You can reproduce it here with a single command: <TODO>
 
 Sustained for X hrs (could keep going, no increase in disk)
@@ -12,6 +14,8 @@ Sustained for X hrs (could keep going, no increase in disk)
 
 no. this viability exercise was just undertaken to test out our assumptions and ensure
 we get hit our throughput targets in a multi-regional setting.
+
+<TODO: include images of CPU/RAM/DISK>
 
 ## Task
 * 10M Accounts
@@ -56,6 +60,8 @@ Yes.
 
 Not included:
 * Bonds/Freezing
+
+### Constraining State Growth with Multi-Dimensional Fee Markets
 
 ### Open Question: MerkleDB or Vilmo 
 
