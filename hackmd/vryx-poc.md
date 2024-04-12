@@ -74,6 +74,8 @@ Instead of merklizing state, we checksum state. This allows for verification of 
 
 Write a series of logs (very similar to WAL approach) but we make compaction deterministic/tied to the block. This sets the stage for trivially charging rent on recycled keys.
 
+Batches are written to log files that are eventually compacted when they have an overwhelming amount of useless data.
+
 ### Parallel Execution
 
 ## Learnings
