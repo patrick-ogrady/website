@@ -3,6 +3,8 @@ _The First 10B Transactions on Vyrx_
 
 > THIS IS A POC AND NOT PRODUCTION-READY CODE. IF YOU RUN INTO ANY BUGS, PLEASE POST THEM ON THE REPO!
 
+> This is not just a consensus implementation but an integration into the HyperSDK.
+
 <100k Sustained Image>
 
 <TODO: link to deploy video>
@@ -63,6 +65,8 @@ Not included:
 * Bonds/Freezing
 
 ### Constraining State Growth with Multi-Dimensional Fee Markets
+
+### Pruning chunks/blocks from node as soon as not needed anymore
 
 ### Open Question: MerkleDB or Vilmo 
 
