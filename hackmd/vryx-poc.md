@@ -64,7 +64,7 @@ Yes.
 Not included:
 * Bonds/Freezing
 
-### Constraining State Growth with Multi-Dimensional Fee Markets
+### Would you ever run this in production? Constraining State Growth with Multi-Dimensional Fee Markets
 
 ### Pruning chunks/blocks from node as soon as not needed anymore
 
