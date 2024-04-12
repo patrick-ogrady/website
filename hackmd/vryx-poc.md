@@ -68,9 +68,11 @@ Not included:
 
 ### Pruning chunks/blocks from node as soon as not needed anymore
 
-### Open Question: MerkleDB or Vilmo 
+### Open Question: MerkleDB or Vilmo
 
 Instead of merklizing state, we checksum state. This allows for verification of execution and for fast syncing but does not allow proof generation against state.
+
+Write a series of logs (very similar to WAL approach) but we make compaction deterministic/tied to the block. This sets the stage for trivially charging rent on recycled keys.
 
 ### Parallel Execution
 
