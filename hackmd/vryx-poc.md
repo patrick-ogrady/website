@@ -92,6 +92,8 @@ Write a series of logs (very similar to WAL approach) but we make compaction det
 
 Batches are written to append-only files that are eventually compacted when they have an overwhelming amount of useless data.
 
+Open question: unequal log file sizes?
+
 ### Parallel Execution
 
 To expedite transaction execution, non-conflicting transactions are processed in parallel. In this Devnet, this meant that ~80% of txs were
