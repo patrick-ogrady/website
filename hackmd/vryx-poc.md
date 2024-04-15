@@ -28,6 +28,9 @@ over the coming months we will attempt to max it out (both with participants and
   * Zipf Distribution of Acitvity (s=1.0001 v=2.7)
 * Historical blocks/chunks pruned after depth of 512
 
+network latency -> including handling time
+-> should divide by 2 for one-way (fix time to chunk attestation)
+
 * Finalized Transaction Data = ~20MB/s
   * bandwidth used by each validator is X MB/s inbound and X MB/s outbound (bandwidth dominated by chunk distribution which is symmetric)
     * TODO: amount is less than this to the node because of compression
