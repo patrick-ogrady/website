@@ -89,9 +89,7 @@ Validators running HyperSDK-Based chains are not expected to indefinitely persis
 to store enough data for other Validators to sync to the network. As a result, Validators don't require much disk space and can run
 at "steady state" indefinitely because they clean up after themselves.
 
-### Open Question: MerkleDB or Vilmo
-
-Vilmo: Verifiable State Transition Application and Sync without Merklization
+### Vilmo: Verifiable State Transition Application and Sync without Merklization
 
 Most blockchains [merklize their state](https://ethereum.org/en/developers/docs/data-structures-and-encoding/patricia-merkle-trie/) once per block. Merklization, which incurs a cost of `O(log(n))` for each state update/read (not including any additional cost to update the underlying database used to persist the merkle structure to disk), enables a proof to be constructed for arbitrary key/values in state. A nice byproduct of this approach is that it also allows all participants in a blockchain with merklized state to quickly verify that they executed all state transitions the same as everyone else (for the same set of key/values, everyone will generate the same merkle root). Merklization also allows for efficient, verifiable sync between nodes where a node can request a portion of the merkle trie at a given root with a proof that the provided state is correct. They can repeat this process until they have fetched all state (this can even be done [on-the-fly as roots are updated](https://github.com/ava-labs/avalanchego/blob/7975cb723fa17d909017db6578252642ba796a62/x/merkledb/README.md?plain=1#L194) with some clever tricks).
 
@@ -99,9 +97,11 @@ The primary downsides of merklizing state are this `O(log(n))` complexity for ea
 
 When I began testing the Vryx Proof-of-Concept, the HyperSDK merklized state at each block using the [MerkleDB](https://github.com/ava-labs/avalanchego/blob/7975cb723fa17d909017db6578252642ba796a62/x/merkledb). Very quickly, however, this became the bottleneck to increasing throughput. To find more headroom, I began to only generate a root every 60 seconds, however, this still caused instability (at 100k TPS with 10M accounts, this meant writing ~2.5M keys to disk in a single batch). Upon further review, I found the root cause of this was inserting tens of thousands of keys into [Pebble](https://github.com/cockroachdb/pebble), a RocksDB/LevelDB inspired key-value database, in a single batch every second. Pebble allows entries to be iterated over in-order, something that isn't needed to service a merkle trie. This got dramatically worse as I increased the number of keys in the database and compaction increased dramatically.
 
+However, even with an optimal disk management (what Firewood is attempting to solve), the cost of updating a merkle trie will never be free. Maybe there is some other set of tradeoffs to explore?
+
 Are we saying Merkilzation is the issue or existing KV databases (Pebble)? or both?
 
-To maximize efficiency and still allow for verifiable syncing and some level of execution verification, I decided to try a different approach: Vilmo.
+To maximize efficiency and still allow for verifiable state transition application and syncing, I ditched both merklization and Pebble for a new key-value database I created called Vilmo. Vilmo, like the HyperSDK, is opinionated and optimized for this particular use case. While it doesn't allow for proofs of arbitrary state to be generated, it does allow for...
 
 Vilmo is a new key-value database that doesn't provide the ability to iterate over keys in-order that is optimized for massive write throughput. It is an append-only database model on-disk that can still maintain a set of deterministically checksummed log files that can be persisted in the chain and synced.
 
