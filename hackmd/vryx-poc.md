@@ -1,6 +1,8 @@
 # Vryx PoC: Reproducible Devnet (Mark I)
 _The First Y B Transactions on Vyrx_
 
+A few months ago, we released documentation about [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction and some detailed ideas of how that would be applied to the HyperSDK.
+
 > THIS IS A POC AND NOT PRODUCTION-READY CODE. IF YOU RUN INTO ANY BUGS, PLEASE POST THEM ON THE REPO!
 
 > This is not just a consensus implementation but an integration into the HyperSDK.
@@ -43,7 +45,7 @@ network latency -> including handling time
 * E2E Time-to-Execution (notifyied issuer) (TTF + TTE) = 3-3.5s
 
 ## Setup
-* c7g.8xlarge (32 vCPU, 64GB RAM, 100GB io2 EBS with 2000 IOPS)
+* c7g.8xlarge (32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS)
 * 5 Regions (us-west-2,us-east-1,ap-south-1,ap-northeast-1,eu-west-1)
 * 50 Equal Weight Validators (10 in each region)
 * 5 API Nodes (1 in each region)
@@ -84,6 +86,11 @@ to store enough data for other Validators to sync to the network. As a result, V
 at "steady state" indefinitely because they clean up after themselves.
 
 ### Open Question: MerkleDB or Vilmo
+
+Most blockchains merklize state at the end of each block or after every few blocks.
+
+Vilmo, unlike most state management mechanisms employed by blockchains, does not merklize state. It sacrifices the ability to prove arbitrary state at each block for performance. Even without merklization, provides
+one useful property we can use to verify execution results between nodes and perform a verifible sync: deterministic checksums.
 
 Started with MerkleDB but eventually bottlenecked on writes. After a number of optimizations to both PebbleDB and MerkleDB, I decided to try a different approach to drive more performance (and that it did).
 
