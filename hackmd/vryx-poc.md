@@ -89,7 +89,7 @@ Validators running HyperSDK-Based chains are not expected to indefinitely persis
 to store enough data for other Validators to sync to the network. As a result, Validators don't require much disk space and can run
 at "steady state" indefinitely because they clean up after themselves.
 
-### Vilmo: Verifiable State Transition Application and Sync without Merklization
+### Vilmo: Verifiable State Transitions and Sync without Merklization
 
 Many blockchains merklize their state to provide...
 
@@ -99,7 +99,7 @@ The primary downsides of merklizing state are this `O(log(n))` complexity for ea
 
 When I began testing the Vryx Proof-of-Concept, the HyperSDK merklized state at each block using the [MerkleDB](https://github.com/ava-labs/avalanchego/blob/7975cb723fa17d909017db6578252642ba796a62/x/merkledb). Very quickly, however, this became the bottleneck to increasing throughput. To find more headroom, I began to only generate a root every 60 seconds, however, this still caused instability (at 100k TPS with 10M accounts, this meant writing ~2.5M keys to disk in a single batch). Upon further review, I found the root cause of this was inserting tens of thousands of keys into [Pebble](https://github.com/cockroachdb/pebble), a RocksDB/LevelDB inspired key-value database, in a single batch every second. Pebble allows entries to be iterated over in-order, something that isn't needed to service a merkle trie. This got dramatically worse as I increased the number of keys in the database and compaction increased dramatically.
 
-If we relax our requirements that we can prove any key in state but retain our need to verify state transition application and sync, the design space widens considerably.
+What if we don't care about all of these properties? If we relax our requirements that we can prove any key in state but retain our need to verify state transition application and sync, the design space widens considerably.
 
 However, even with an optimal disk management (what Firewood is attempting to solve), the cost of updating a merkle trie will never be free. Maybe there is some other set of tradeoffs to explore?
 
@@ -144,6 +144,8 @@ immediately executable.
 ### Refunds aren't compatible with chunk building
 
 ## What's Next?
+
+Productionize the PoC.
 
 ## Acknowledgements
 
