@@ -1,7 +1,11 @@
 # Vryx PoC: Reproducible Devnet (Mark I)
+
 _The First Y B Transactions on Vyrx_
 
-A few months ago, we released documentation about [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction and some detailed ideas of how that would be applied to the HyperSDK.
+A few months ago, I posted a [blog post](https://hackmd.io/@patrickogrady/rys8mdl5p) about Vryx, a fortified decoupled state machine replication construction. Vryx claimed to unblock
+a large increase in throughput for the HyperSDK. This blog post is a write-up of the PoC of that work.
+
+ documentation about [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction and some detailed ideas of how that would be applied to the HyperSDK.
 
 > THIS IS A POC AND NOT PRODUCTION-READY CODE. IF YOU RUN INTO ANY BUGS, PLEASE POST THEM ON THE REPO!
 
@@ -87,7 +91,13 @@ at "steady state" indefinitely because they clean up after themselves.
 
 ### Open Question: MerkleDB or Vilmo
 
-Most blockchains merklize state at the end of each block or after every few blocks.
+Most blockchains [merklize their state](https://ethereum.org/en/developers/docs/data-structures-and-encoding/patricia-merkle-trie/) once per block. Merklization, which incurs a cost of `O(log(n))` for each state update/read (not including any additional cost to update the underlying database used to persist the merkle structure to disk), enables arbitrary proofs to be constructed for any key/value in state. A nice byproduct of this approach is that it also allows all participants in a blockchain with merklized state to quickly verify that they executed all state transitions the same as everyone else (for the same set of key/values, everyone will generate the same merkle root). Merklization also allows for efficient, verifiable sync between nodes where a node can request a portion of the merkle trie at a given root with a proof that the provided state is correct. They can repeat this process until they have fetched all state (this can even be done [on-the-fly as roots are updated](https://github.com/ava-labs/avalanchego/blob/7975cb723fa17d909017db6578252642ba796a62/x/merkledb/README.md?plain=1#L194) with some clever tricks).
+
+The primary downsides of merklizing state are this `O(log(n))` complexity for each operation and the need to manage a substantial number of intermediate (inner) nodes in the merkle trie. Most blockchains get around a `O(log(n))` complexity for each read by maintaining a [flat KV store for values](https://blog.ethereum.org/2021/05/18/eth-state-problems) that sits in front of the merkle trie, however, this approach doesn't solve for the cost to update state. Others, have opted to only store intermediate (inner) nodes in memory to avoid excessive disk writes or have opted to only update the merkle trie every `n` blocks to better amortize the cost of each update. Ava Labs has gone as far as building a [new database](https://www.avax.network/blog/introducing-firewood-a-next-generation-database-built-for-high-throughput-blockchains) to better avoid the overhead of managing a merkle trie on-disk (which has typically been done in a standard embedded database like LevelDB or RocksDB).
+
+
+
+ once per block or once per set of blocks.
 
 Vilmo, unlike most state management mechanisms employed by blockchains, does not merklize state. It sacrifices the ability to prove arbitrary state at each block for performance. Even without merklization, provides
 one useful property we can use to verify execution results between nodes and perform a verifible sync: deterministic checksums.
