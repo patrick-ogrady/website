@@ -120,7 +120,7 @@ Started with MerkleDB but eventually bottlenecked on writes. After a number of o
 
 Future work: could layer a merkle trie on top of Vilmo (which is just a KV store) and remove checksumming.
 
-Future work: add state rent by iterating over state
+Future work: add state rent by iterating over state (tie to compaction complexity)
 
 <TODO: include diagram of Vilmo (batch files with layers of content)>
 
