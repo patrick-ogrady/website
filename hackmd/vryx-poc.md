@@ -95,7 +95,11 @@ Most blockchains [merklize their state](https://ethereum.org/en/developers/docs/
 
 The primary downsides of merklizing state are this `O(log(n))` complexity for each operation and the need to manage a substantial number of intermediate (inner) nodes in the merkle trie. Most blockchains get around a `O(log(n))` complexity for each read by maintaining a [flat KV store for values](https://blog.ethereum.org/2021/05/18/eth-state-problems) that sits in front of the merkle trie, however, this approach doesn't solve for the cost to update state. Others, have opted to only store intermediate (inner) nodes in memory to avoid excessive disk writes or have opted to only update the merkle trie every `n` blocks to better amortize the cost of each update. Ava Labs has gone as far as building a [new database](https://www.avax.network/blog/introducing-firewood-a-next-generation-database-built-for-high-throughput-blockchains) to better avoid the overhead of managing a merkle trie on-disk (which has typically been done in a standard embedded database like LevelDB or RocksDB).
 
+When I began testing the Vryx Proof-of-Concept, the HyperSDK merklized state at each block using the [MerkleDB](https://github.com/ava-labs/avalanchego/blob/7975cb723fa17d909017db6578252642ba796a62/x/merkledb). Very quickly, however, this became the bottleneck to increasing throughput. To find more headroom, I began to only generate a root every 60 seconds, however, this still caused instability (at 100k TPS with 10M accounts, this meant writing ~2.5M keys to disk in a single batch). Upon further review, I found the root cause of this was inserting tens of thousands of keys into [Pebble](https://github.com/cockroachdb/pebble), a RocksDB/LevelDB inspired key-value database, in a single batch every second. Pebble allows entries to be iterated over in-order, something that isn't needed to service a merkle trie.
 
+Vilmo is a new key-value database that doesn't provide the ability to iterate over keys in-order that is optimized for massive write throughput. It is an append-only database model on-disk.
+
+For teams that still want merklization, they can build on top of Vilmo.
 
  once per block or once per set of blocks.
 
@@ -103,6 +107,8 @@ Vilmo, unlike most state management mechanisms employed by blockchains, does not
 one useful property we can use to verify execution results between nodes and perform a verifible sync: deterministic checksums.
 
 Started with MerkleDB but eventually bottlenecked on writes. After a number of optimizations to both PebbleDB and MerkleDB, I decided to try a different approach to drive more performance (and that it did).
+
+Future work: could layer a merkle trie on top of Vilmo (which is just a KV store)
 
 <TODO: include diagram of Vilmo (batch files with layers of content)>
 
