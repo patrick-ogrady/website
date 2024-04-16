@@ -27,7 +27,7 @@ over the coming months we will attempt to max it out (both with participants and
 
 <TODO: include images of CPU/RAM/DISK>
 
-## Task
+## Task: Simulate Micropayment Workload
 * 10M Accounts
 * ~2.5M Unique Accounts Active per 60s (~100k state changes per second)
 * Simple Transfers using ED25519 Keys
@@ -119,6 +119,8 @@ one useful property we can use to verify execution results between nodes and per
 Started with MerkleDB but eventually bottlenecked on writes. After a number of optimizations to both PebbleDB and MerkleDB, I decided to try a different approach to drive more performance (and that it did).
 
 Future work: could layer a merkle trie on top of Vilmo (which is just a KV store) and remove checksumming.
+
+Future work: add state rent by iterating over state
 
 <TODO: include diagram of Vilmo (batch files with layers of content)>
 
