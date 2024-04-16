@@ -45,7 +45,7 @@ network latency -> including handling time
 ## Setup
 * c7g.8xlarge (32 vCPU, 64GB RAM, 100GB io2 EBS with 2000 IOPS)
 * 5 Regions (us-west-2,us-east-1,ap-south-1,ap-northeast-1,eu-west-1)
-* 25 Equal Weight Validators (5 in each region)
+* 50 Equal Weight Validators (10 in each region)
 * 5 API Nodes (1 in each region)
 * 1 Tx Issuer (c7gn.8xlarge, eu-west-1, sends txs randomly to API nodes, doesn't use known validator partitions)
 
