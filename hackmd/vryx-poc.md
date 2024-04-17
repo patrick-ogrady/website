@@ -1,15 +1,14 @@
 # Processing 5 Billion Micropayments (at 100k TPS) with Vryx and Vilmo
 
-Over the last few days, the first [Vryx-enabled](https://hackmd.io/@patrickogrady/rys8mdl5p) HyperSDK devnet processed 5+ billion micropayments at a sustained rate of 100,000 transactions per second (TPS). This test involved 10,000,000 active accounts (2,500,000 active every 60 seconds and 95,000 active every second) and 50 equal weight validators (32 vCPU, 64 GB RAM, 100 GB io2 SSD) distributed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1).
+Over the last few days, the first [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p) devnet processed 5 billion micropayments at a sustained rate of 100,000 transactions per second (TPS). This test involved 10,000,000 active accounts (2,500,000 active every 60 seconds and 95,000 active every second) sending simple transfers to each other. The likelihood that any account was active in a given second was determined by a standard [Zipf Distribution](https://en.wikipedia.org/wiki/Zipf%27s_law). The devnet was validated by 50 equal-weight nodes (32 vCPU, 64 GB RAM, 100 GB io2 SSD) distributed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1). Transactions were issued to 1 of 5 API nodes (1 per region) by a single issuer in eu-west-1.
 
 ![Transactions Per Second](https://patrickogrady.xyz/images/vryx-poc/transactions-rate.png)
 
-You can view the code (Vryx Proof-of-Concept HyperSDK integration) used to run this devnet [here](https://github.com/ava-labs/hypersdk/pull/711). You can reproduce these results in your own AWS account by [running a single command](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh).
-
-![Cumulative Transactions](https://patrickogrady.xyz/images/vryx-poc/transactions-cummulative.png)
+You can view the code that powered this devnet [here](https://github.com/ava-labs/hypersdk/pull/711). You can reproduce these results in your own AWS account by [running this script (single command)](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh).
 
 ## Task: Process 5 Billion Micropayments
 
+In January, [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction that .
 
 Today, I couldn't be more thrilled to share the results of the Proof-of-Concept integration of Vryx with the HyperSDK.
 
@@ -40,6 +39,10 @@ Sustained for X hrs (could keep going, no increase in disk)
 no. this viability exercise was just undertaken to test out our assumptions and ensure
 we get hit our throughput targets in a multi-regional setting. As the system is productionized
 over the coming months we will attempt to max it out (both with participants and throughput).
+
+## Results
+
+![Cumulative Transactions](https://patrickogrady.xyz/images/vryx-poc/transactions-cummulative.png)
 
 <TODO: include images of CPU/RAM/DISK>
 
