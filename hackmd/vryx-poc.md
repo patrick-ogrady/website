@@ -1,6 +1,15 @@
 # Processing 5 Billion Micropayments (at 100k TPS) with Vryx and Vilmo
 
-A few months ago, I posted a [blog post](https://hackmd.io/@patrickogrady/rys8mdl5p) about Vryx, a fortified decoupled state machine replication construction. Vryx claimed to unblock
+Over the last few days, the first [Vryx](https://github.com/ava-labs/hypersdk/pull/711) Load Test processed 5+ billion micropayments at a sustained rate of 100,000 transactions per second (TPS). This test involved 10,000,000 active accounts (2,500,000 active every 60 seconds and 95,000 active every second) and 50 equal weight validators (32 vCPU, 64 GB RAM, 100 GB io2 SSD) distributed over 5 regions (us-west-2,us-east-1,ap-south-1,ap-northeast-1,eu-west-1).
+
+Today, I couldn't be more thrilled to share the results of the Proof-of-Concept integration of Vryx with the HyperSDK.
+
+In January, I released [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction.
+
+ that would be integrated with the [Avalanche HyperSDK](https://github.com/ava-labs/hypersdk), to push its throughput to our initial goal of 100,000 transactions per second (TPS).
+
+
+ Vryx claimed to unblock
 a large increase in throughput for the HyperSDK. This blog post is a write-up of the PoC of that work.
 
  documentation about [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction and some detailed ideas of how that would be applied to the HyperSDK.
@@ -105,7 +114,7 @@ Vilmo optimizes for large (100k+ key-values) batch writes by leveraging a collec
 
 <TODO: include diagram of Vilmo (batch files with layers of content)>
 
-Vilmo compaction (when required) occurs during block execution and is synchronized across all nodes. The frequency of this compaction is tuneable (i.e. how much "useless" data can live in a log before cleanup), however, the timing of this compaction (during block execution) is not. This approach allows for a forthcoming implementation of state expiry and/or state rent to be applied during compaction (charging a fee to each key that is preserved during a rewrite). This fee would likely increase the larger the log file is to deter an attacker from purposely increasing the size of single log file to increase the time compaction will take (Vilmo works best when log files are of uniform size). Exposing state compaction to the HyperSDK allows it to better charge for resource usage that is currently not accounted for in most blockchains (i.e. the cost of maintaining state on-disk).
+Vilmo compaction (when required) occurs during block execution and is synchronized across all nodes. The frequency of this compaction is tuneable (i.e. how much "useless" data can live in a log before cleanup), however, the timing of this compaction (during block execution) is not. This approach allows for a forthcoming implementation of state expiry and/or state rent to be applied during compaction (charging a fee to each key that is preserved during a rewrite). This fee would likely increase the larger the log file is to deter an attacker from purposely increasing the size of a single log file to increase the time compaction will take (Vilmo works best when log files are of uniform size). Exposing state compaction to the HyperSDK allows it to better charge for resource usage that is currently not accounted for in most blockchains (i.e. the cost of maintaining state on-disk).
 
 ### Parallel Execution
 
