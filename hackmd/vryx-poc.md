@@ -41,19 +41,15 @@ Given this test only used ~35% of the validator CPU and ~13 MB/s each of inbound
 
 ### Results
 
-network latency -> including handling time
--> should divide by 2 for one-way (fix time to chunk attestation)
-
-* Finalized Transaction Data = ~20MB/s
-  * bandwidth used by each validator is X MB/s inbound and X MB/s outbound (bandwidth dominated by chunk distribution which is symmetric)
-    * TODO: amount is less than this to the node because of compression
-  * at no point does any validator exceed Y MB/s of inbound/outbound bandwidth (no hotspots)
-  * API nodes are ~Z MB/s (get subset of txs and fetch chunks from validators)
-* TTC Tx Attested (once tx is on validator) = 230ms
-* Time-to-Chunk Attestation (Issuer -> API -> Validator -> Chunk Produced (every 333ms) -> Chunk Attested) = 125ms + 125ms + 330ms (worst) + 230ms = ~710ms
-  * 0% expiry/failure rate for transactions, chunks, and blocks
-* E2E Time-to-Finality (issuance to ordered on-chain but before executed and notified) = 2.2-2.7s (1s block time)
-* E2E Time-to-Execution (notifyied issuer) (TTF + TTE) = 3-3.5s
+* ~20 MB/s of finalized transaction data
+* ~13 MB/s of both inbound and outbound network bandwidth per validator (there is less than 20 MB/s of data sent between validators because all messages are compressed using zstd)
+  * Bandwidth usage is similar across all validators (no hotspots/imbalance)
+* 0% expiry and/or failure rate for transactions, chunks, and blocks
+* ~230ms Time-To-Confirm Chunk (from production of chunk to generation of chunk certificate)
+* ~700ms Time-to-Chunk Attestation (issuer sends transaction to API -> issuer receives notification from API that transaction is included in attested chunk)
+* ~3.25s End-to-End Time-to-Finality (issuer sends transaction to API -> issuers receives notification from API that transaction is final)
+* ~35% CPU usage per validator
+* 25 GB of disk space used per validator (blocks and chunks continuously pruned)
 
 ## How is this possible?
 ### Vryx
