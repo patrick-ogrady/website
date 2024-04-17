@@ -12,60 +12,34 @@ You can view the code that powered this devnet [here](https://github.com/ava-lab
 
 In January, Ava Labs released [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction that provided a path to scale the throughput of each [Avalanche HyperSDK-enabled blockchain to over 100,000 TPS](https://www.theblock.co/post/274683/ava-labs-outlines-scaling-solution-vryx-in-plan-for-avalanche-to-reach-100000-tps). Providing a path and walking that path, however, are two different things. When translating a specification into running code, any engineer will tell you that unknown unknowns can arise and sink an entire project (unforeseen issues with a design render an approach infeasible).
 
-My first goal after the Vryx publication, for this reason, was to write a Vryx Proof-of-Concept to test the viability and performance of the core ideas proposed (can we hit 100k TPS on a multi-regional devnet?). [Tens of thousands of lines of code](https://github.com/ava-labs/hypersdk/pull/711) later, I am happy to report that the Vryx viability assessment effort was successful. Not only did the devnet sustain 100k TPS, it did so when deployed using a [script](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh) that anyone else could use to replicate the results (and to explore the performance of other configurations).
-
-Before reading further, please keep in mind that this is the **first** devnet configuration published for Vryx. As soon as testing hit the performance goals set out prior to implementation, I decided to stop experimenting and publish the results. In the coming months, I hope to answer questions like: How many transactions can be processed per second? How many more validators can be added? How many more regions can be added? How many accounts can be used at a given TPS? Given this test only used ~35% of the validator CPU and ~13 MB/s each of inbound and outbound network bandwidth (yes...it is symmetric), I'd be surprised if this devnet configuration is the "limit" across any of these dimensions but I won't comment on that with confidence until there are reproducible devnets demonstrating as much.
-
-
-[This is that story](https://github.com/ava-labs/hypersdk/pull/711).
-
- that render the idea broken.
-
-
-After the publication of Vryx, my focus immediately shifted to testing out the viability of the ideas presented in the blog with the HyperSDK.
-
-Today, I couldn't be more thrilled to share the results of the Proof-of-Concept integration of Vryx with the HyperSDK.
-
-In January, I released [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction.
-
- that would be integrated with the [Avalanche HyperSDK](https://github.com/ava-labs/hypersdk), to push its throughput to our initial goal of 100,000 transactions per second (TPS).
-
-
- Vryx claimed to unblock
-a large increase in throughput for the HyperSDK. This blog post is a write-up of the PoC of that work.
-
- documentation about [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction and some detailed ideas of how that would be applied to the HyperSDK.
-
-> THIS IS A POC AND NOT PRODUCTION-READY CODE. IF YOU RUN INTO ANY BUGS, PLEASE POST THEM ON THE REPO!
-
-> This is not just a consensus implementation but an integration into the HyperSDK.
-
-<TODO: 100k Sustained Image>
-
-Don't believe me? You can reproduce it here with a single command (just make sure you are signed into AWS): <TODO>
-
-Don't want to do it? You can watch me do it on YouTube <TODO: link to deploy demo video>
-
-Sustained for X hrs (could keep going, no increase in disk)
-
-> Is this maxxed out?
-
-no. this viability exercise was just undertaken to test out our assumptions and ensure
-we get hit our throughput targets in a multi-regional setting. As the system is productionized
-over the coming months we will attempt to max it out (both with participants and throughput).
-
-## Results
+My first goal after the Vryx publication, for this reason, was to write a Vryx Proof-of-Concept to test the viability and performance of the core ideas proposed (can we hit 100k TPS on a multi-regional devnet?). [Tens of thousands of lines of code](https://github.com/ava-labs/hypersdk/pull/711) later, I am happy to report that the Vryx viability assessment was successful. Not only did the devnet sustain 100k TPS, it did so when deployed using a [script](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh) that anyone else could use to replicate the results (and to explore the performance of other configurations).
 
 ![Cumulative Transactions](https://patrickogrady.xyz/images/vryx-poc/transactions-cummulative.png)
 
-<TODO: include images of CPU/RAM/DISK>
+Before reading further, please keep in mind that this is the **first** devnet configuration published for Vryx. **As soon as testing hit the performance goals set out prior to implementation, I decided to stop experimenting and publish the results.** In the coming months, I hope to answer questions like:
 
-## Task: Simulate Micropayment Workload
-* 10M Accounts
-* ~2.5M Unique Accounts Active per 60s (~100k state changes per second)
-* Simple Transfers using ED25519 Keys
-  * Zipf Distribution of Acitvity (s=1.0001 v=2.7)
-* Historical blocks/chunks pruned after depth of 512
+1) How much does throughput drop with more complex transactions?
+2) How many transactions can be processed per second?
+3) How many more validators can be added?
+4) How many more regions can be added?
+5) How many accounts can be used at a given TPS?
+
+Given this test only used ~35% of the validator CPU and ~13 MB/s each of inbound and outbound network bandwidth (yes...Vryx is symmetric), I'd be surprised if this devnet configuration is the "limit" across any of these dimensions but will refrain from saying as much until there exist reproducible devnets demonstrating as much.
+
+### Devnet Configuration
+
+* 50 equal-weight validators (c7g.8xlarge => 32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS) deployed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1)
+* 5 API nodes (c7g.8xlarge => 32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS) deployed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1)
+* 1 transaction issuer (c7gn.8xlarge => 32 vCPU, 64GB RAM) in eu-west-1
+  * Transactions issued randomly to API nodes over a websocket connection (**never sent to validators directly**)
+* 10,000,000 active accounts
+  * ~2,500,000 unique active accounts per 60 seconds
+  * ~95,000 unique active accounts per second
+  * Account activity determined using a Zipf-Mandelbrot Distribution (s=1.0001 v=2.7)
+* All transactions are simple transfers and each transfer has its own signature (Ed25519)
+* Accepted blocks and chunks pruned after reaching a depth of 512
+
+### Results
 
 network latency -> including handling time
 -> should divide by 2 for one-way (fix time to chunk attestation)
@@ -80,23 +54,6 @@ network latency -> including handling time
   * 0% expiry/failure rate for transactions, chunks, and blocks
 * E2E Time-to-Finality (issuance to ordered on-chain but before executed and notified) = 2.2-2.7s (1s block time)
 * E2E Time-to-Execution (notifyied issuer) (TTF + TTE) = 3-3.5s
-
-## Setup
-* c7g.8xlarge (32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS)
-* 5 Regions (us-west-2,us-east-1,ap-south-1,ap-northeast-1,eu-west-1)
-* 50 Equal Weight Validators (10 in each region)
-* 5 API Nodes (1 in each region)
-* 1 Tx Issuer (c7gn.8xlarge, eu-west-1, sends txs randomly to API nodes, doesn't use known validator partitions)
-
-> Can we add more nodes?
-
-Yes. Each additional node requires additional replication of all block and chunk material.
-
-If you run the repro, post how many nodes you used! We plan to scale this up over the coming devnets (just uses Snowman Consensus behind the scenes, which has already hit ~1.8k validators on Mainnet)!
-
-> Can we add more regions?
-
-Yes.
 
 ## How is this possible?
 ### Vryx
