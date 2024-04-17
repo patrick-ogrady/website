@@ -6,7 +6,7 @@ Over the last few days, the first [Vryx-enabled](https://hackmd.io/@patrickograd
 
 You can view the code (Vryx Proof-of-Concept HyperSDK integration) used to run this devnet [here](https://github.com/ava-labs/hypersdk/pull/711). You can reproduce these results in your own AWS account by [running a single command](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh).
 
-![Cummulative Transactions](https://patrickogrady.xyz/images/vryx-poc/transactions-cummulative.png)
+![Cumulative Transactions](https://patrickogrady.xyz/images/vryx-poc/transactions-cummulative.png)
 
 ## Task: Process 5 Billion Micropayments
 
@@ -121,7 +121,7 @@ Vilmo, the embedded key-value database that manages state on the HyperSDK, is an
 
 Vilmo optimizes for large (100k+ key-values) batch writes by leveraging a collection of rotating append-only log files. The deterministic checksum of the changes written in a single batch to a log file can then be used to compare the result of execution between multiple parties.  When most of the data previously written to a log file is no longer "alive", the log file is compacted (rewritten) to only include "alive" data. When a batch is appended to an existing log file, the checksum of the last batch is added to the checksum calculation of the new batch so that the entire log file can be verified rather than just the latest batch. This allows for other parties to sync the last `n` log files from the chain to fully sync the latest state (by applying the modifications in order). Vilmo assumes that the operator keeps an index of all alive keys and the location of their values in-memory. Each log file is mmap-ed for fast access. You can review a preliminary implementation of Vilmo [here](https://github.com/ava-labs/hypersdk/tree/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/vilmo). If you are familiar with WALs, you can think of Vilmo as a series of rotating WALs that are updated in a specific way.
 
-<TODO: include diagram of Vilmo (batch files with layers of content)>
+![Vilmo](https://patrickogrady.xyz/images/vryx-poc/vilmo.png)
 
 Vilmo compaction (when required) occurs during block execution and is synchronized across all nodes. The frequency of this compaction is tuneable (i.e. how much "useless" data can live in a log before cleanup), however, the timing of this compaction (during block execution) is not. This approach allows for a forthcoming implementation of state expiry and/or state rent to be applied during compaction (charging a fee to each key that is preserved during a rewrite). This fee would likely increase the larger the log file is to deter an attacker from purposely increasing the size of a single log file to increase the time compaction will take (Vilmo works best when log files are of uniform size). Exposing state compaction to the HyperSDK allows it to better charge for resource usage that is currently not accounted for in most blockchains (i.e. the cost of maintaining state on-disk).
 
