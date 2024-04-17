@@ -8,9 +8,21 @@ You can view the code that powered this devnet [here](https://github.com/ava-lab
 
 > This code is under active development and is not considered production-ready. If you run into any issues, please post them in the [HyperSDK repository](https://github.com/ava-labs/hypersdk/issues)!
 
-## Proving Vryx: Sustaining 100k TPS
+## Proving Vryx Viability: Sustaining 100k TPS
 
-In January, Ava Labs released [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction that provided a path to scale the throughput of each [Avalanche HyperSDK-enabled blockchain to over 100,000 TPS](https://www.theblock.co/post/274683/ava-labs-outlines-scaling-solution-vryx-in-plan-for-avalanche-to-reach-100000-tps). Providing a path and walking that path, however, are two different things. After the publication of Vryx, my focus immediately shifted to testing out the viability of the ideas presented in the blog with the HyperSDK.
+In January, Ava Labs released [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction that provided a path to scale the throughput of each [Avalanche HyperSDK-enabled blockchain to over 100,000 TPS](https://www.theblock.co/post/274683/ava-labs-outlines-scaling-solution-vryx-in-plan-for-avalanche-to-reach-100000-tps). Providing a path and walking that path, however, are two different things. When translating a specification into running code, any engineer will tell you that unknown unknowns can arise and sink an entire project (unforeseen issues with a design render an approach infeasible).
+
+My first goal after the Vryx publication, for this reason, was to write a Vryx Proof-of-Concept to test the viability and performance of the core ideas proposed (can we hit 100k TPS on a multi-regional devnet?). [Tens of thousands of lines of code](https://github.com/ava-labs/hypersdk/pull/711) later, I am happy to report that the Vryx viability assessment effort was successful. Not only did the devnet sustain 100k TPS, it did so when deployed using a [script](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh) that anyone else could use to replicate the results (and to explore the performance of other configurations).
+
+Before reading further, please keep in mind that this is the **first** devnet configuration published for Vryx. As soon as testing hit the performance goals set out prior to implementation, I decided to stop experimenting and publish the results. In the coming months, I hope to answer questions like: How many transactions can be processed per second? How many more validators can be added? How many more regions can be added? How many accounts can be used at a given TPS? Given this test only used ~35% of the validator CPU and ~13 MB/s each of inbound and outbound network bandwidth (yes...it is symmetric), I'd be surprised if this devnet configuration is the "limit" across any of these dimensions but I won't comment on that with confidence until there are reproducible devnets demonstrating as much.
+
+
+[This is that story](https://github.com/ava-labs/hypersdk/pull/711).
+
+ that render the idea broken.
+
+
+After the publication of Vryx, my focus immediately shifted to testing out the viability of the ideas presented in the blog with the HyperSDK.
 
 Today, I couldn't be more thrilled to share the results of the Proof-of-Concept integration of Vryx with the HyperSDK.
 
