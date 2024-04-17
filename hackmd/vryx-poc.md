@@ -58,6 +58,8 @@ You can view all collected metrics in the [Appendix](#appendix).
 
 Anyone in the crypto space has seen a lot of "TPS" claims.
 
+There are unique trade-offs and novel techniques being applied here.
+
 ### Vryx: Fortifying Decoupled State Machine Replication
 
 ### Vilmo: Verifiable State Transitions and Sync without Merklization
@@ -82,43 +84,20 @@ Vilmo optimizes for large (100k+ key-values) batch writes by leveraging a collec
 
 Vilmo compaction (when required) occurs during block execution and is synchronized across all nodes. The frequency of this compaction is tuneable (i.e. how much "useless" data can live in a log before cleanup), however, the timing of this compaction (during block execution) is not. This approach allows for a forthcoming implementation of state expiry and/or state rent to be applied during compaction (charging a fee to each key that is preserved during a rewrite). This fee would likely increase the larger the log file is to deter an attacker from purposely increasing the size of a single log file to increase the time compaction will take (Vilmo works best when log files are of uniform size). Exposing state compaction to the HyperSDK allows it to better charge for resource usage that is currently not accounted for in most blockchains (i.e. the cost of maintaining state on-disk).
 
-## How is this possible?
-### Vryx
-* Chunk-Based Transaction Dissemination
-  * BLS Multi-Signatures
-* Address Partitioning
-* Filtered Chunks
-* Block + Chunk Pruning
+### Multi-Dimensional Fee Markets
+
+Naturally, you may be wondering how you would run this in production
 
 ![Read (Units)](https://patrickogrady.xyz/images/vryx-poc/units-read.png)
 ![Write (Units)](https://patrickogrady.xyz/images/vryx-poc/units-write.png)
 ![Allocate (Units)](https://patrickogrady.xyz/images/vryx-poc/units-allocate.png)
 
-Not included:
-* Bonds/Freezing
 
-### Would you ever run this in production? Constraining State Growth with Multi-Dimensional Fee Markets
-
-Unlike with a single dimensional fee where increasing capacity opens the door to using any available resource to the max usage,
-the HyperSDK uses Multi-Dimensional Fees to individually constrain each resource. This allows someone, for example, to restrict
-the amount of new state that can be allocated each second to a value much less than the state read/updated per second (which is often
-less of the bottleneck and/or incurs little to no long-term risk).
+Unlike with a single dimensional fee where increasing capacity opens the door to using any available resource to the max usage, the HyperSDK uses Multi-Dimensional Fees to individually constrain each resource. This allows someone, for example, to restrict the amount of new state that can be allocated each second to a value much less than the state read/updated per second (which is often less of the bottleneck and/or incurs little to no long-term risk).
 
 ### Pruning chunks/blocks from node as soon as not needed anymore
 
-Validators running HyperSDK-Based chains are not expected to indefinitely persist chain data. Rather, they are just supposed
-to store enough data for other Validators to sync to the network. As a result, Validators don't require much disk space and can run
-at "steady state" indefinitely because they clean up after themselves.
-
-Accidental discovery...
-
-## Learnings
-
-### Push Certifified Chunks to Non-Validators
-
-### Begin Verifying Chunk Authentication as Soon as Certified
-
-### Refunds aren't compatible with chunk building
+Validators running HyperSDK-Based chains are not expected to indefinitely persist chain data. Rather, they are just supposed to store enough data for other Validators to sync to the network. As a result, Validators don't require much disk space and can run at "steady state" indefinitely because they clean up after themselves.
 
 ## What's Next?
 
@@ -127,7 +106,6 @@ Productionize the PoC.
 ## Acknowledgements
 
 Thanks to Stephen for being a great sounding board throughout this PoC.
-
 
 ### Appendix
 
