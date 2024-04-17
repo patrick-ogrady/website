@@ -122,6 +122,8 @@ Future work: could layer a merkle trie on top of Vilmo (which is just a KV store
 
 Future work: add state rent by iterating over state (tie to compaction complexity)
 
+Cool Future: State Expiry Using Exposed Compaction (can just set a height/block expiry and as soon as a batch is rewritten past this time, the object is just dropped)
+
 <TODO: include diagram of Vilmo (batch files with layers of content)>
 
 Instead of merklizing state, we checksum append-only batches. This allows for verification of execution and for fast syncing but does not allow proof generation against state.
