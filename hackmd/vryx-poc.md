@@ -1,4 +1,4 @@
-# Vryx PoC: Reproducible Devnet (Mark I)
+# Processing 5 Billion Micropayments (at 100k TPS) on the HyperSDK with Vryx and Vilmo
 
 _The First Y B Transactions on Vyrx_
 
