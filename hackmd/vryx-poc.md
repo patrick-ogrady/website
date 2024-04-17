@@ -1,8 +1,6 @@
 # Processing 5 Billion Micropayments (at 100k TPS) with Vryx and Vilmo
 
-<p align="center">
-  <img src="https://patrickogrady.xyz/images/vryx-poc/transactions-rate.png" alt="Transactions Per Second" width="70%"/>
-</p>
+![Transactions Per Second](https://patrickogrady.xyz/images/vryx-poc/transactions-rate.png)
 
 Over the last few days, the first [Vryx-enabled](https://github.com/ava-labs/hypersdk/pull/711) HyperSDK devnet processed 5+ billion micropayments at a sustained rate of 100,000 transactions per second (TPS). This test involved 10,000,000 active accounts (2,500,000 active every 60 seconds and 95,000 active every second) and 50 equal weight validators (32 vCPU, 64 GB RAM, 100 GB io2 SSD) distributed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1). You can reproduce these results in your own AWS account by running a [single command](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh).
 
