@@ -95,7 +95,10 @@ When designing the state storage layer for a blockchain, there are three primary
 2) enforcing that state transitions are applied consistently amongst all parties
 3) fetching the current state from existing participants (to avoid re-execution of all state transitions)
 
-When all these capabilities are required, most blockchains will [merklize their state](https://ethereum.org/en/developers/docs/data-structures-and-encoding/patricia-merkle-trie/) either once per block or once every few blocks (batched state updates can be more efficient).
+When all these capabilities are required, most blockchains will [merklize their state](https://ethereum.org/en/developers/docs/data-structures-and-encoding/patricia-merkle-trie/) either once per block or once every few blocks (batched state updates can be more efficient). Once state is merklized, it can be efficiently represented by a single hash, the merkle root. If any values are modified, this root will change (i.e. two states will only have the same root if they have the same state). You can read more about the interesting properties of Merkle Tries [here](https://www.avax.network/blog/from-the-labs-handling-blockchain-state).
+
+
+Merklization, which incurs a cost of `O(log(n))` for each state update/read (not including any additional cost to update the underlying database used to persist the merkle structure to disk).
 
 When all of these properties are desired, most blockchains merklize their state...
 
