@@ -1,14 +1,16 @@
 # Processing 5 Billion Micropayments (at 100k TPS) with Vryx and Vilmo
 
-Over the last few days, the first [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p) devnet processed 5 billion micropayments at a sustained rate of 100,000 transactions per second (TPS). This test involved 10,000,000 active accounts (2,500,000 active every 60 seconds and 95,000 active every second) sending simple transfers to each other. The likelihood that any account was active in a given second was determined by a standard [Zipf Distribution](https://en.wikipedia.org/wiki/Zipf%27s_law). The devnet was validated by 50 equal-weight nodes (32 vCPU, 64 GB RAM, 100 GB io2 SSD) distributed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1). Transactions were issued to 1 of 5 API nodes (1 per region) by a single issuer in eu-west-1.
+Over the last few days, the first [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p) devnet processed **5 billion micropayments** at a sustained rate of **100,000 transactions per second (TPS)**. This test involved 10,000,000 active accounts (2,500,000 active every 60 seconds and 95,000 active every second) sending simple transfers to each other. The likelihood that any account was active in a given second was determined by a standard [Zipf Distribution](https://en.wikipedia.org/wiki/Zipf%27s_law). The devnet was validated by 50 equal-weight nodes (32 vCPU, 64 GB RAM, 100 GB io2 SSD) distributed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1). Transactions were issued to 1 of 5 API nodes (1 per region) by a single issuer in eu-west-1.
 
 ![Transactions Per Second](https://patrickogrady.xyz/images/vryx-poc/transactions-rate.png)
 
-You can view the code that powered this devnet [here](https://github.com/ava-labs/hypersdk/pull/711). You can reproduce these results in your own AWS account by [running this script (single command)](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh).
+You can view the code that powered this devnet [here](https://github.com/ava-labs/hypersdk/pull/711). You can reproduce these results (or modify any of the configuration like the number of validators) in your own AWS account by [running this script (single command)](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh).
 
-## Task: Process 5 Billion Micropayments
+> This code is under active development and is not considered production-ready. If you run into any issues, please post them in the [HyperSDK repository](https://github.com/ava-labs/hypersdk/issues)!
 
-In January, [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction that .
+## Proving Vryx: Sustaining 100k TPS
+
+In January, Ava Labs released [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction that provided a path to scale the throughput of each [Avalanche HyperSDK-enabled blockchain to over 100,000 TPS](https://www.theblock.co/post/274683/ava-labs-outlines-scaling-solution-vryx-in-plan-for-avalanche-to-reach-100000-tps). Providing a path and walking that path, however, are two different things. After the publication of Vryx, my focus immediately shifted to testing out the viability of the ideas presented in the blog with the HyperSDK.
 
 Today, I couldn't be more thrilled to share the results of the Proof-of-Concept integration of Vryx with the HyperSDK.
 
@@ -107,6 +109,8 @@ less of the bottleneck and/or incurs little to no long-term risk).
 Validators running HyperSDK-Based chains are not expected to indefinitely persist chain data. Rather, they are just supposed
 to store enough data for other Validators to sync to the network. As a result, Validators don't require much disk space and can run
 at "steady state" indefinitely because they clean up after themselves.
+
+Accidental discovery...
 
 ### Vilmo: Verifiable State Transitions and Sync without Merklization
 
