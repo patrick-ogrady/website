@@ -1,6 +1,4 @@
-# Processing 5 Billion Micropayments (at 100k TPS) on the HyperSDK with Vryx and Vilmo
-
-_The First Y B Transactions on Vyrx_
+# Processing 5 Billion Micropayments (at 100k TPS) with Vryx and Vilmo
 
 A few months ago, I posted a [blog post](https://hackmd.io/@patrickogrady/rys8mdl5p) about Vryx, a fortified decoupled state machine replication construction. Vryx claimed to unblock
 a large increase in throughput for the HyperSDK. This blog post is a write-up of the PoC of that work.
@@ -91,7 +89,23 @@ at "steady state" indefinitely because they clean up after themselves.
 
 ### Vilmo: Verifiable State Transitions and Sync without Merklization
 
-Many blockchains merklize their state to provide...
+When designing the state storage layer for a blockchain, there are three primary capabilities that are typically considered:
+
+1) proving the value of arbitrary keys in state
+2) enforcing that state transitions are applied consistently amongst all parties
+3) fetching the current state from existing participants (to avoid re-execution of all state transitions)
+
+When all these capabilities are required, most blockchains will [merklize their state](https://ethereum.org/en/developers/docs/data-structures-and-encoding/patricia-merkle-trie/) either once per block or once every few blocks (batched state updates can be more efficient).
+
+When all of these properties are desired, most blockchains merklize their state...
+
+
+
+Based on the performance tradeoffs, these capabilities may be provided after each block or after a set of blocks (batched state updates can be more efficient).
+
+When all of these properties are desired, most blockchains merklize their state...
+
+What if we don't care about all of these properties? If we relax our requirements such that we no longer need to prove arbitrary state while still retaining the need to verify state transition application and sync, the design space widens considerably.
 
 Most blockchains [merklize their state](https://ethereum.org/en/developers/docs/data-structures-and-encoding/patricia-merkle-trie/) once per block. Merklization, which incurs a cost of `O(log(n))` for each state update/read (not including any additional cost to update the underlying database used to persist the merkle structure to disk), enables a proof to be constructed for arbitrary key/values in state. A nice byproduct of this approach is that it also allows all participants in a blockchain with merklized state to quickly verify that they executed the same state transitions as everyone else (for the same set of key/values, everyone will generate the same merkle root). Merklization also allows for efficient, verifiable sync between nodes where a node can request a portion of the merkle trie at a given root with a proof that the provided state is correct. They can repeat this process until they have fetched all state (this can even be done [on-the-fly as roots are updated](https://github.com/ava-labs/avalanchego/blob/7975cb723fa17d909017db6578252642ba796a62/x/merkledb/README.md?plain=1#L194) with some clever tricks).
 
