@@ -93,67 +93,19 @@ When designing the state storage layer for a blockchain, there are three primary
 
 1) proving the value of arbitrary keys in state
 2) enforcing that state transitions are applied consistently amongst all parties
-3) fetching the current state from existing participants (to avoid re-execution of all state transitions)
+3) fetching the current state efficiently and verifiably from existing participants (to avoid re-execution of all state transitions)
 
 When all these capabilities are required, most blockchains opt to [merklize their state](https://ethereum.org/en/developers/docs/data-structures-and-encoding/patricia-merkle-trie/) either once per block or once every few blocks (batched state updates can be more efficient). Once state is merklized, it can be efficiently represented by a single hash, the merkle root. If any values are modified, this root will change (i.e. two states will only have the same root if they have the same state). With this root, we can (1) generate a proof that any key-value (or range of key-values) is described by a root by providing a path of hashes from the root to the key-value in question. We can (2) enforce state transitions are applied consistently by checking whether this root (typically just 32 bytes) is the same as the root others have computed. We can (3) fetch the current state from existing participants by requesting a range of key-values from a given root and verifying the proof provided (this can even be done [on-the-fly as roots are updated](https://github.com/ava-labs/avalanchego/blob/7975cb723fa17d909017db6578252642ba796a62/x/merkledb/README.md?plain=1#L194) with some clever tricks). You can read more about the interesting properties of Merkle Tries [here](https://www.avax.network/blog/from-the-labs-handling-blockchain-state).
 
 Merklization, however, is not "free". Each state update/read (not including any additional cost to update/maintain the underlying database that persists the merkle structure to disk) incurs a cost of `O(log(n))` and intermediate (inner) nodes must be maintained although they contain no workload data (just hashes of other nodes, which may be more intermediate nodes in a large trie). Most blockchains get around the `O(log(n))` complexity for each read by maintaining a [flat, key-value store](https://blog.ethereum.org/2021/05/18/eth-state-problems) that sits in front of the Merkle Trie, however, this approach requires storing a copy of all values and does nothing to reduce the cost of updating the Merkle Trie (in fact, it increases the cost because the value must be stored in both places). Others, have opted to store intermediate (inner) nodes in memory to avoid excessive disk writes or have opted to only update the merkle trie every `n` blocks to better amortize the cost of each update. Ava Labs has gone as far as building a [new database (Firewood)](https://www.avax.network/blog/introducing-firewood-a-next-generation-database-built-for-high-throughput-blockchains) to avoid the overhead of the underlying database managing the Merkle Trie on-disk (which has typically been done in an embedded database like LevelDB or RocksDB that isn't optimized for this workload).
 
-Vilmo, the embedded key-value database that manages state on the HyperSDK, is an answer to the question: what if we don't require all of these properties? Specifically, what if we (1) don't need to prove the value of arbitrary keys in state? Instead of merklizing all data, Vilmo checksums append-only logs of state modifications.
+Vilmo, the embedded key-value database that manages state on the HyperSDK, is an answer to the question: what if we don't require all of these properties? Specifically, what if we (1) don't need to prove the value of arbitrary keys in state but still want to (2) enforce state transitions are applied consistently and that (3) new nodes can efficiently fetch the current state from existing participants?
 
-
-Merklization, which incurs a cost of `O(log(n))` for each state update/read (not including any additional cost to update the underlying database used to persist the merkle structure to disk).
-
-When all of these properties are desired, most blockchains merklize their state...
-
-
-
-Based on the performance tradeoffs, these capabilities may be provided after each block or after a set of blocks (batched state updates can be more efficient).
-
-When all of these properties are desired, most blockchains merklize their state...
-
-What if we don't care about all of these properties? If we relax our requirements such that we no longer need to prove arbitrary state while still retaining the need to verify state transition application and sync, the design space widens considerably.
-
-Most blockchains [merklize their state](https://ethereum.org/en/developers/docs/data-structures-and-encoding/patricia-merkle-trie/) once per block. Merklization, which incurs a cost of `O(log(n))` for each state update/read (not including any additional cost to update the underlying database used to persist the merkle structure to disk), enables a proof to be constructed for arbitrary key/values in state. A nice byproduct of this approach is that it also allows all participants in a blockchain with merklized state to quickly verify that they executed the same state transitions as everyone else (for the same set of key/values, everyone will generate the same merkle root). Merklization also allows for efficient, verifiable sync between nodes where a node can request a portion of the merkle trie at a given root with a proof that the provided state is correct. They can repeat this process until they have fetched all state (this can even be done [on-the-fly as roots are updated](https://github.com/ava-labs/avalanchego/blob/7975cb723fa17d909017db6578252642ba796a62/x/merkledb/README.md?plain=1#L194) with some clever tricks).
-
-The primary downsides of merklizing state are this `O(log(n))` complexity for each operation and the need to manage a substantial number of intermediate (inner) nodes in the merkle trie (which contain no actual workload data but just hashes to other nodes). Most blockchains get around a `O(log(n))` complexity for each read by maintaining a [flat KV store for values](https://blog.ethereum.org/2021/05/18/eth-state-problems) that sits in front of the merkle trie, however, this approach doesn't solve for the cost to update state. Others, have opted to only store intermediate (inner) nodes in memory to avoid excessive disk writes or have opted to only update the merkle trie every `n` blocks to better amortize the cost of each update. Ava Labs has gone as far as building a [new database](https://www.avax.network/blog/introducing-firewood-a-next-generation-database-built-for-high-throughput-blockchains) to better avoid the overhead of managing a merkle trie on-disk (which has typically been done in a standard embedded database like LevelDB or RocksDB).
-
-When I began testing the Vryx Proof-of-Concept, the HyperSDK merklized state at each block using the [MerkleDB](https://github.com/ava-labs/avalanchego/blob/7975cb723fa17d909017db6578252642ba796a62/x/merkledb). Very quickly, however, this became the bottleneck to increasing throughput. To find more headroom, I began to only generate a root every 60 seconds, however, this still caused instability (at 100k TPS with 10M accounts, this meant writing ~2.5M keys to disk in a single batch). Upon further review, I found the root cause of this was inserting tens of thousands of keys into [Pebble](https://github.com/cockroachdb/pebble), a RocksDB/LevelDB inspired key-value database, in a single batch every second. Pebble allows entries to be iterated over in-order, something that isn't needed to service a merkle trie. This got dramatically worse as I increased the number of keys in the database and compaction increased dramatically.
-
-What if we don't care about all of these properties? If we relax our requirements that we can prove any key in state but retain our need to verify state transition application and sync, the design space widens considerably.
-
-However, even with an optimal disk management (what Firewood is attempting to solve), the cost of updating a merkle trie will never be free. Maybe there is some other set of tradeoffs to explore?
-
-Are we saying Merkilzation is the issue or existing KV databases (Pebble)? or both?
-
-To maximize efficiency and still allow for verifiable state transition application and syncing, I ditched both merklization and Pebble for a new key-value database I created called Vilmo. Vilmo, like the HyperSDK, is opinionated and optimized for this particular use case. While it doesn't allow for proofs of arbitrary state to be generated, it does allow for...
-
-Vilmo is a new key-value database that doesn't provide the ability to iterate over keys in-order that is optimized for massive write throughput. It is an append-only database model on-disk that can still maintain a set of deterministically checksummed log files that can be persisted in the chain and synced.
-
-For teams that still want merklization, they can build on top of Vilmo.
-
- once per block or once per set of blocks.
-
-Vilmo, unlike most state management mechanisms employed by blockchains, does not merklize state. It sacrifices the ability to prove arbitrary state at each block for performance. Even without merklization, provides
-one useful property we can use to verify execution results between nodes and perform a verifible sync: deterministic checksums.
-
-Started with MerkleDB but eventually bottlenecked on writes. After a number of optimizations to both PebbleDB and MerkleDB, I decided to try a different approach to drive more performance (and that it did).
-
-Future work: could layer a merkle trie on top of Vilmo (which is just a KV store) and remove checksumming.
-
-Future work: add state rent by iterating over state (tie to compaction complexity)
-
-Cool Future: State Expiry Using Exposed Compaction (can just set a height/block expiry and as soon as a batch is rewritten past this time, the object is just dropped)
+Vilmo optimizes for large (100k+ key-values) batch writes by leveraging a collection of rotating append-only log files. The deterministic checksum of the changes written in a single batch to a log file can then be used to compare the result of execution between multiple parties.  When most of the data previously written to a log file is no longer "alive", the log file is compacted (rewritten) to only include "alive" data. When a batch is appended to an existing log file, the checksum of the last batch is added to the checksum calculation of the new batch so that the entire log file can be verified rather than just the latest batch. This allows for other parties to sync the last `n` log files from the chain to fully sync the latest state (by applying the modifications in order). Vilmo assumes that the operator keeps an index of all alive keys and the location of their values in-memory. Each log file is mmap-ed for fast access. You can review a preliminary implementation of Vilmo [here](https://github.com/ava-labs/hypersdk/tree/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/vilmo). If you are familiar with WALs, you can think of Vilmo as a series of rotating WALs that are updated in a specific way.
 
 <TODO: include diagram of Vilmo (batch files with layers of content)>
 
-Instead of merklizing state, we checksum append-only batches. This allows for verification of execution and for fast syncing but does not allow proof generation against state.
-
-Write a series of logs (very similar to WAL approach) but we make compaction deterministic/tied to the block. This sets the stage for trivially charging rent on recycled keys.
-
-Batches are written to append-only files that are eventually compacted when they have an overwhelming amount of useless data.
-
-Open question: unequal log file sizes?
+Vilmo compaction (when required) occurs during block execution and is synchronized across all nodes. The frequency of this compaction is tuneable (i.e. how much "useless" data can live in a log before cleanup), however, the timing of this compaction (during block execution) is not. This approach allows for a forthcoming implementation of state expiry and/or state rent to be applied during compaction (charging a fee to each key that is preserved during a rewrite). This fee would likely increase the larger the log file is to deter an attacker from purposely increasing the size of single log file to increase the time compaction will take (Vilmo works best when log files are of uniform size). Exposing state compaction to the HyperSDK allows it to better charge for resource usage that is currently not accounted for in most blockchains (i.e. the cost of maintaining state on-disk).
 
 ### Parallel Execution
 
