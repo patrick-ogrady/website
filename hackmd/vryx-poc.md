@@ -45,11 +45,15 @@ Given this test only used ~35% of the validator CPU and ~13 MB/s each of inbound
 * ~13 MB/s of both inbound and outbound network bandwidth per validator (there is less than 20 MB/s of data sent between validators because all messages are compressed using zstd)
   * Bandwidth usage is similar across all validators (no hotspots/imbalance)
 * 0% expiry and/or failure rate for transactions, chunks, and blocks
+* 80% of transactions can be executed immediately (non-conflicting transactions are processed in parallel)
 * ~230ms Time-To-Confirm Chunk (from production of chunk to generation of chunk certificate)
 * ~700ms Time-to-Chunk Attestation (issuer sends transaction to API -> issuer receives notification from API that transaction is included in attested chunk)
 * ~3.25s End-to-End Time-to-Finality (issuer sends transaction to API -> issuers receives notification from API that transaction is final)
 * ~35% CPU usage per validator
 * 25 GB of disk space used per validator (blocks and chunks continuously pruned)
+
+You can view all collected metrics in the [Appendix](#appendix).
+
 
 ## How is this possible?
 ### Vryx
@@ -58,6 +62,10 @@ Given this test only used ~35% of the validator CPU and ~13 MB/s each of inbound
 * Address Partitioning
 * Filtered Chunks
 * Block + Chunk Pruning
+
+![Read (Units)](https://patrickogrady.xyz/images/vryx-poc/units-read.png)
+![Write (Units)](https://patrickogrady.xyz/images/vryx-poc/units-write.png)
+![Allocate (Units)](https://patrickogrady.xyz/images/vryx-poc/units-allocate.png)
 
 Not included:
 * Bonds/Freezing
@@ -117,3 +125,35 @@ Productionize the PoC.
 ## Acknowledgements
 
 Thanks to Stephen for being a great sounding board throughout this PoC.
+
+
+### Appendix
+
+![Transactions Per Second](https://patrickogrady.xyz/images/vryx-poc/transactions-rate.png)
+![Cumulative Transactions](https://patrickogrady.xyz/images/vryx-poc/transactions-cummulative.png)
+![Bandwidth (Units)](https://patrickogrady.xyz/images/vryx-poc/units-bandwidth.png)
+![Collect Chunk Signatures](https://patrickogrady.xyz/images/vryx-poc/collect-chunk-signatures.png)
+![Block Execution Latency](https://patrickogrady.xyz/images/vryx-poc/latency-block-execution.png)
+![Chunk Backlog (Gossip)](https://patrickogrady.xyz/images/vryx-poc/chunk-backlog.png)
+![Alive Bytes](https://patrickogrady.xyz/images/vryx-poc/alive-bytes.png)
+![Useless Bytes](https://patrickogrady.xyz/images/vryx-poc/useless-bytes.png)
+![Chain Data](https://patrickogrady.xyz/images/vryx-poc/chain-data.png)
+![Network Inbound](https://patrickogrady.xyz/images/vryx-poc/network-inbound.png)
+![Network Outbound](https://patrickogrady.xyz/images/vryx-poc/network-outbound.png)
+![CPU Usage](https://patrickogrady.xyz/images/vryx-poc/utilization-cpu.png)
+![Memory Usage](https://patrickogrady.xyz/images/vryx-poc/utilization-memory.png)
+![Deleted Blocks](https://patrickogrady.xyz/images/vryx-poc/deleted-blocks.png)
+![Deleted Chunks](https://patrickogrady.xyz/images/vryx-poc/deleted-chunks.png)
+![Executable Transactions](https://patrickogrady.xyz/images/vryx-poc/executable-transactions.png)
+![Network Latency](https://patrickogrady.xyz/images/vryx-poc/latency-network.png)
+![Commit Latency](https://patrickogrady.xyz/images/vryx-poc/latency-commit.png)
+![Blocks Processing](https://patrickogrady.xyz/images/vryx-poc/blocks-processing.png)
+![Blocks Accepted](https://patrickogrady.xyz/images/vryx-poc/blocks-accepted.png)
+![Blocks Rejected](https://patrickogrady.xyz/images/vryx-poc/blocks-rejected.png)
+![Unprocessed Messages](https://patrickogrady.xyz/images/vryx-poc/unprocessed-messages.png)
+![Unprocessed Async Messages](https://patrickogrady.xyz/images/vryx-poc/unprocessed-async-messages.png)
+![Disk Write Latency](https://patrickogrady.xyz/images/vryx-poc/latency-disk-write.png)
+![State Changes](https://patrickogrady.xyz/images/vryx-poc/state-changes.png)
+![Read (Units)](https://patrickogrady.xyz/images/vryx-poc/units-read.png)
+![Write (Units)](https://patrickogrady.xyz/images/vryx-poc/units-write.png)
+![Allocate (Units)](https://patrickogrady.xyz/images/vryx-poc/units-allocate.png)
