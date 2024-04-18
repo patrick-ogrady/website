@@ -87,11 +87,13 @@ Anyone that has been around for more than a few days has seen a "TPS claim"...to
 
 **Expressed Tradeoffs:** When something seems too good to be true, it probably is. When designing the HyperSDK (and Vryx + Vilmo), "costly" tradeoffs were made to maximize throughput and minimize resource usage. Some of the more controversial tradeoffs include: (1) checksum-ing state instead of merklizing it, (2) requiring transactions to be committed before it is known whether they can be executed, and (3) charging fees for on-chain activity in 5 dimensions (bandwidth, compute, read, allocate, write). The road to best-in-class performance is not a set of "free" compromises and requires careful consideration of the available design space to produce a set of tradeoffs that appeal at a given throughput level.
 
+> If there are other qualities you think throughput tests should uphold that aren't mentioned here, please [reach out to me on X](https://twitter.com/_patrickogrady)! I'd love to hear your thoughts.
+
 ## Acknowledgements
 
 Thanks to [Stephen Buttolph](https://twitter.com/stephenbuttolph), [Aaron Buchwald](https://twitter.com/AaronBuchwald), and [Darioush Jalali](https://twitter.com/darioush0) for their invaluable support during the initial implementation of Vryx. Your insightful feedback and novel ideas were instrumental to the success of this project.
 
-Thanks to the entire [avalanche-cli](https://github.com/ava-labs/avalanche-cli) team for their weeks of quick work on supporting "single command devnet deployment" to make the reproucibility of these results possible by anyone on independent hardware.
+Thanks to the entire [avalanche-cli](https://github.com/ava-labs/avalanche-cli) team for their work on supporting "single command devnet deployment" to make the these results reproducible with a single command.
 
 ### Appendix
 
