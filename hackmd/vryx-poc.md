@@ -53,7 +53,7 @@ Before reading further, please keep in mind that this is the **first** devnet co
 * _~35%_ CPU usage per validator
 * _25 GB_ of disk space used per validator (blocks and chunks continuously pruned)
 
-> You can view all collected metrics in the [Appendix](#appendix).
+> You can view all collected metrics in the Appendix (at the bottom).
 
 ## Introducing Vilmo: Verifiable State Transitions and Sync without Merklization
 
@@ -95,7 +95,7 @@ Thanks to [Stephen Buttolph](https://twitter.com/stephenbuttolph), [Aaron Buchwa
 
 Thanks to the entire [avalanche-cli](https://github.com/ava-labs/avalanche-cli) team for their work on supporting "single command devnet deployment" to make the these results reproducible with a single command.
 
-### Appendix
+## Appendix
 
 ![Transactions Per Second](https://patrickogrady.xyz/images/vryx-poc/transactions-rate.png)
 ![Cumulative Transactions](https://patrickogrady.xyz/images/vryx-poc/transactions-cummulative.png)
