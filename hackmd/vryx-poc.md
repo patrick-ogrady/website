@@ -28,37 +28,42 @@ Given this test only used ~35% of the validator CPU and ~13 MB/s each of inbound
 
 ### Devnet Configuration
 
-* 50 equal-weight validators (c7g.8xlarge => 32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS) deployed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1)
-* 5 API nodes (c7g.8xlarge => 32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS) deployed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1)
-* 1 transaction issuer (c7gn.8xlarge => 32 vCPU, 64GB RAM) in eu-west-1
+* _50_ equal-weight validators (c7g.8xlarge => 32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS) deployed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1)
+* _5_ API nodes (c7g.8xlarge => 32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS) deployed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1)
+* _1_ transaction issuer (c7gn.8xlarge => 32 vCPU, 64GB RAM) in eu-west-1
   * Transactions issued randomly to API nodes over a websocket connection (**never sent to validators directly**)
-* 10,000,000 active accounts
-  * ~2,500,000 unique active accounts per 60 seconds
-  * ~95,000 unique active accounts per second
-  * Account activity determined using a Zipf-Mandelbrot Distribution (s=1.0001 v=2.7)
-* All transactions are simple transfers and each transfer has its own signature (Ed25519)
-* Accepted blocks and chunks pruned after reaching a depth of 512
+* _10,000,000_ active accounts
+  * _~2,500,000_ unique active accounts per 60 seconds
+  * _~95,000_ unique active accounts per second
+  * Account activity determined using a Zipf-Mandelbrot Distribution (_s=1.0001 v=2.7_)
+* All transactions are simple transfers and each transfer has its own signature (Ed25519) that is verified by all participants
+* All state changes are persisted to disk using [Vilmo](#vilmo-verifiable-state-transitions-and-sync-without-merklization)
+* Accepted blocks and chunks pruned after reaching a depth of _512_
 
 ### Results
 
-* ~20 MB/s of finalized transaction data
-* ~13 MB/s of both inbound and outbound network bandwidth per validator (there is less than 20 MB/s of data sent between validators because all messages are compressed using zstd)
+> You can view all collected metrics in the [Appendix](#appendix).
+
+* _~20 MB/s_ of finalized transaction data
+* _~13 MB/s_ of both inbound and outbound network bandwidth per validator (there is less than 20 MB/s of data sent between validators because all messages are compressed using zstd)
   * Bandwidth usage is similar across all validators (no hotspots/imbalance)
-* 0% expiry and/or failure rate for transactions, chunks, and blocks
-* 80% of transactions can be executed immediately (non-conflicting transactions are processed in parallel)
-* ~230ms Time-To-Confirm Chunk (from production of chunk to generation of chunk certificate)
-* ~700ms Time-to-Chunk Attestation (issuer sends transaction to API -> issuer receives notification from API that transaction is included in attested chunk)
-* ~3.25s End-to-End Time-to-Finality (issuer sends transaction to API -> issuers receives notification from API that transaction is final)
-* ~35% CPU usage per validator
-* 25 GB of disk space used per validator (blocks and chunks continuously pruned)
+* _0%_ expiry and/or failure rate for transactions, chunks, and blocks
+* _80%_ of transactions can be executed immediately (non-conflicting transactions are processed in parallel)
+* _~230ms_ Time-To-Confirm Chunk (from production of chunk to generation of chunk certificate)
+* _~700ms_ Time-to-Chunk Attestation (issuer sends transaction to API -> issuer receives notification from API that transaction is included in attested chunk)
+* _~3.25s_ End-to-End Time-to-Finality (issuer sends transaction to API -> issuers receives notification from API that transaction is final)
+* _~35%_ CPU usage per validator
+* _25 GB_ of disk space used per validator (blocks and chunks continuously pruned)
 
-You can view all collected metrics in the [Appendix](#appendix).
+## Is This Another "Bajillion TPS" Gimmick?
 
-## Is This a Gimmick?
+Anyone that has been around for more than a few days has seen a "TPS claim"...to be frank, why is this one any different?
 
-Anyone in the crypto space has seen a lot of "TPS" claims.
+**Transparency:** When publishing the results of a throughput test, the circumstances and context are everything. 100k TPS on a single machine is very different than 50 machines or 500 machines. Verifying signatures and persisting state changes to disk dramatically impact results. 10M active accounts put a very different stress on a system than 100 active accounts. Any throughput test must be adequately specified to carry any weight and you've been presented with detailed information about the network topology, the hardware used by each node, and the actual transactions issued (to reiterate, simple but signed transfers in this setup).
 
-There are unique trade-offs and novel techniques being applied here.
+**Reproducibility:** Sharing an image of a throughput test or tweeting that it happened does not satisfy the burden of proof (or at least it doesn't in most industries). The code that is tested and the test itself must be available and should be reproducible by any observer on independent hardware. In the case of this setup, the code that was active on the devnet is available [here](https://github.com/ava-labs/hypersdk/pull/711) and the script that can be used to reproduce these results is available [here](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh) (assuming you have an AWS account).
+
+**Tradeoffs:** There are unique trade-offs and novel techniques being applied here.
 
 ### Vryx: Fortifying Decoupled State Machine Replication
 
@@ -84,6 +89,8 @@ Vilmo optimizes for large (100k+ key-values) batch writes by leveraging a collec
 
 Vilmo compaction (when required) occurs during block execution and is synchronized across all nodes. The frequency of this compaction is tuneable (i.e. how much "useless" data can live in a log before cleanup), however, the timing of this compaction (during block execution) is not. This approach allows for a forthcoming implementation of state expiry and/or state rent to be applied during compaction (charging a fee to each key that is preserved during a rewrite). This fee would likely increase the larger the log file is to deter an attacker from purposely increasing the size of a single log file to increase the time compaction will take (Vilmo works best when log files are of uniform size). Exposing state compaction to the HyperSDK allows it to better charge for resource usage that is currently not accounted for in most blockchains (i.e. the cost of maintaining state on-disk).
 
+### Parallel Transaction Execution
+
 ### Multi-Dimensional Fee Markets
 
 Naturally, you may be wondering how you would run this in production
@@ -95,7 +102,7 @@ Naturally, you may be wondering how you would run this in production
 
 Unlike with a single dimensional fee where increasing capacity opens the door to using any available resource to the max usage, the HyperSDK uses Multi-Dimensional Fees to individually constrain each resource. This allows someone, for example, to restrict the amount of new state that can be allocated each second to a value much less than the state read/updated per second (which is often less of the bottleneck and/or incurs little to no long-term risk).
 
-### Pruning chunks/blocks from node as soon as not needed anymore
+### Aggressive Pruning
 
 Validators running HyperSDK-Based chains are not expected to indefinitely persist chain data. Rather, they are just supposed to store enough data for other Validators to sync to the network. As a result, Validators don't require much disk space and can run at "steady state" indefinitely because they clean up after themselves.
 
