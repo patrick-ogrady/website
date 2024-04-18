@@ -4,7 +4,7 @@ Over the last few days, the first [Vryx](https://hackmd.io/@patrickogrady/rys8md
 
 ![Transactions Per Second](https://patrickogrady.xyz/images/vryx-poc/transactions-rate.png)
 
-You can view the code that powered this devnet [here](https://github.com/ava-labs/hypersdk/pull/711). You can reproduce these results (or modify any of the configuration like the number of validators) in your own AWS account by [running this script](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh).
+You can view the code that powered this devnet [here](https://github.com/ava-labs/hypersdk/pull/711). You can reproduce these results (or modify any of the configuration like the number of validators) in your own AWS account by [running this script](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh). If you don't want to deploy your own devnet but want to watch someone do it, you can check out this [video](https://youtu.be/O4Ahkj0_S6Q).
 
 > This code is under active development and is not considered production-ready. If you run into any issues, please post them in the [HyperSDK repository](https://github.com/ava-labs/hypersdk/issues)!
 
