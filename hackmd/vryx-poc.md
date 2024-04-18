@@ -87,7 +87,7 @@ Anyone that has been around for more than a few days has seen a "TPS claim"...to
 
 **Expressed Tradeoffs:** When something seems too good to be true, it probably is. When designing the HyperSDK (and Vryx + Vilmo), "costly" tradeoffs were made to maximize throughput and minimize resource usage. Some of the more controversial tradeoffs include: (1) checksum-ing state instead of merklizing it, (2) requiring transactions to be committed before it is known whether they can be executed, and (3) charging fees for on-chain activity in 5 dimensions (bandwidth, compute, read, allocate, write). The road to best-in-class performance is not a set of "free" compromises and requires careful consideration of the available design space to produce a set of tradeoffs that appeal at a given throughput level.
 
-> If there are other qualities you think throughput tests should uphold that aren't mentioned here, please [reach out to me on X](https://twitter.com/_patrickogrady)! I'd love to hear your thoughts.
+> If there are other qualities you think throughput tests should uphold that aren't mentioned here, please [reach out to me on X](https://twitter.com/_patrickogrady)! I've been considering something along the lines of **Production Plausible** but haven't quite found the right way to articulate it yet.
 
 ## Acknowledgements
 
