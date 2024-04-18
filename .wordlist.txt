@@ -103,3 +103,6 @@ Appchains
 Sekniqi
 Vryx
 ProgramVM
+Micropayments
+TPS
+Vilmo
