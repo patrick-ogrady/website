@@ -1,18 +1,18 @@
 # Processing 5 Billion Micropayments (at 100k TPS) with Vryx and Vilmo
 
-Over the last few days, the first [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p) devnet processed **5 billion micropayments** at a sustained rate of **100,000 transactions per second (TPS)**. This test involved 10,000,000 active accounts (2,500,000 active every 60 seconds and 95,000 active every second) sending simple transfers to each other. The likelihood that a particular account was active in a transaction was given by the [Zipf-Mandelbrot Law](https://en.wikipedia.org/wiki/Zipf%27s_law) with a standard parameterization (`a=~1`, `b=~2.7`). The devnet was validated by 50 equal-weight nodes (32 vCPU, 64 GB RAM, 100 GB io2 SSD) distributed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1). Transactions were issued to 1 of 5 API nodes (1 per region) by a single issuer in eu-west-1.
+Over the last few days, the first [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p) devnet processed **5 billion micropayments** at a sustained rate of **100,000 transactions per second (TPS)**. This test involved 10,000,000 active accounts (2,500,000 active every 60 seconds and 95,000 active every second) sending transfers to each other. The likelihood that a particular account was active in a transaction was given by a [Zipf-Mandelbrot Distribution](https://en.wikipedia.org/wiki/Zipf%27s_law) with a standard parameterization (`a=~1`, `b=~2.7`). The devnet was validated by 50 equal-weight instances (32 vCPU, 64 GB RAM, 100 GB io2 SSD) running Snowman Consensus across 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1). Transactions were issued to 1 of 5 API nodes (1 per region) by a single issuer located in eu-west-1.
 
 ![Transactions Per Second](https://patrickogrady.xyz/images/vryx-poc/transactions-rate.png)
 
-You can view the code that powered this devnet [here](https://github.com/ava-labs/hypersdk/pull/711). You can reproduce these results (or modify any of the configuration like the number of validators) in your own AWS account by [running this script (single command)](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh).
+You can view the code that powered this devnet [here](https://github.com/ava-labs/hypersdk/pull/711). You can reproduce these results (or modify any of the configuration like the number of validators) in your own AWS account by [running this script](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh).
 
 > This code is under active development and is not considered production-ready. If you run into any issues, please post them in the [HyperSDK repository](https://github.com/ava-labs/hypersdk/issues)!
 
 ## Proving Vryx Viability: Sustaining 100k TPS
 
-In January, Ava Labs released [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction that provided a path to scale the throughput of each [Avalanche HyperSDK-enabled blockchain to over 100,000 TPS](https://www.theblock.co/post/274683/ava-labs-outlines-scaling-solution-vryx-in-plan-for-avalanche-to-reach-100000-tps). Providing a path and walking that path, however, are two different things. When translating a specification into running code, any engineer will tell you that unknown unknowns can arise and sink an entire project (unforeseen issues with a design render an approach infeasible).
+In January, Ava Labs released [Vryx](https://hackmd.io/@patrickogrady/rys8mdl5p), a fortified decoupled state machine replication construction that provided a path to scale the throughput of each [Avalanche HyperSDK blockchain instance to over 100,000 TPS](https://www.theblock.co/post/274683/ava-labs-outlines-scaling-solution-vryx-in-plan-for-avalanche-to-reach-100000-tps). Providing a path and walking that path, however, are two different things. When translating a specification into running code, any engineer will tell you that unknown unknowns can sink any promising project (unforeseen issues with a design render an approach infeasible).
 
-My first goal after the Vryx publication, for this reason, was to write a Vryx Proof-of-Concept to test the viability and performance of the core ideas proposed (can we hit 100k TPS on a multi-regional devnet?). [Tens of thousands of lines of code](https://github.com/ava-labs/hypersdk/pull/711) later, I am happy to report that the Vryx viability assessment was successful. Not only did the devnet sustain 100k TPS, it did so when deployed using a [script](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh) that anyone else could use to replicate the results (and to explore the performance of other configurations).
+My first goal after the Vryx publication, for this reason, was to write a quick-and-dirty HyperSDK integration of Vryx to test the viability and performance of the core ideas proposed (can we hit 100k TPS on a multi-regional devnet?). [Tens of thousands of lines of code](https://github.com/ava-labs/hypersdk/pull/711) later, I am happy to report that the Vryx viability assessment was a success. Not only did the devnet sustain 100k TPS, it did so when deployed using a [script](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh) that anyone else could use to replicate the results (and to explore the performance of other configurations). While there were learnings that will be incorporated into Vryx, none of the learnings undermined the practicality of the approach or raised concern that Vryx would not work in a production setting.
 
 ![Cumulative Transactions](https://patrickogrady.xyz/images/vryx-poc/transactions-cummulative.png)
 
@@ -24,11 +24,11 @@ Before reading further, please keep in mind that this is the **first** devnet co
 4) How many more regions can be added?
 5) How many accounts can be used at a given TPS?
 
-Given this test only used ~35% of the validator CPU and ~13 MB/s each of inbound and outbound network bandwidth (yes...Vryx is symmetric), I'd be surprised if this devnet configuration is the "limit" across any of these dimensions but will refrain from saying as much until there exist reproducible devnets demonstrating as much.
+> Given this test only used ~35% of the validator CPU and ~13 MB/s of both inbound and outbound network bandwidth, I'd be surprised if this devnet configuration is the "limit" across any of these dimensions but will refrain from saying as much until there exist reproducible results demonstrating as much.
 
 ### Devnet Configuration
 
-* _50_ equal-weight validators (c7g.8xlarge => 32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS) deployed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1)
+* _50_ equal-weight validators (c7g.8xlarge => 32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS) deployed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1) running Snowman Consensus
 * _5_ API nodes (c7g.8xlarge => 32 vCPU, 64GB RAM, 100GB io2 EBS with 2500 IOPS) deployed over 5 regions (us-west-2, us-east-1, ap-south-1, ap-northeast-1, eu-west-1)
 * _1_ transaction issuer (c7gn.8xlarge => 32 vCPU, 64GB RAM) in eu-west-1
   * Transactions issued randomly to API nodes over a websocket connection (**never sent to validators directly**)
@@ -36,13 +36,11 @@ Given this test only used ~35% of the validator CPU and ~13 MB/s each of inbound
   * _~2,500,000_ unique active accounts per 60 seconds
   * _~95,000_ unique active accounts per second
   * Account activity determined using a Zipf-Mandelbrot Distribution (_s=1.0001 v=2.7_)
-* All transactions are simple transfers and each transfer has its own signature (Ed25519) that is verified by all participants
+* All transactions are transfers and each transfer has its own signature (Ed25519) that is verified by all participants
 * All state changes are persisted to disk using [Vilmo](#vilmo-verifiable-state-transitions-and-sync-without-merklization)
 * Accepted blocks and chunks pruned after reaching a depth of _512_
 
 ### Results
-
-> You can view all collected metrics in the [Appendix](#appendix).
 
 * _~20 MB/s_ of finalized transaction data
 * _~13 MB/s_ of both inbound and outbound network bandwidth per validator (there is less than 20 MB/s of data sent between validators because all messages are compressed using zstd)
@@ -55,15 +53,7 @@ Given this test only used ~35% of the validator CPU and ~13 MB/s each of inbound
 * _~35%_ CPU usage per validator
 * _25 GB_ of disk space used per validator (blocks and chunks continuously pruned)
 
-## Is This Another "Bajillion TPS" Gimmick?
-
-Anyone that has been around for more than a few days has seen a "TPS claim"...to be frank, why is this one any different?
-
-**Transparency:** When publishing the results of a throughput test, the circumstances and context are everything. 100k TPS on a single machine is very different than 50 machines or 500 machines. Verifying signatures and persisting state changes to disk dramatically impact results. 10M active accounts put a very different stress on a system than 100 active accounts. Any throughput test must be adequately specified to carry any weight and you've been presented with detailed information about the network topology, the hardware used by each node, and the actual transactions issued (to reiterate, simple but signed transfers in this setup).
-
-**Reproducibility:** Sharing an image of a throughput test or tweeting that it happened does not satisfy the burden of proof (or at least it doesn't in most industries). The code that is tested and the test itself must be available and should be reproducible by any observer on independent hardware. In the case of this setup, the code that was active on the devnet is available [here](https://github.com/ava-labs/hypersdk/pull/711) and the script that can be used to reproduce these results is available [here](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh) (assuming you have an AWS account).
-
-**Expressed Tradeoffs:** When something seems too good to be true, it probably is. When designing the HyperSDK, Vryx, and Vilmo, clear and "costly" tradeoffs were made to maximize throughput and minimize resource usage. Some of the more controversial tradeoffs include: (1) checksum-ing state instead of merklizing it, (2) requiring transactions to be committed before it is known whether they can be executed, and (3) charging fees for on-chain activity in 5 dimensions (bandwidth, compute, read, allocate, write). The road to best-in-class performance is not a set of "free" compromises and requires careful consideration of the available design space to produce a set of tradeoffs that appeal at each throughput level.
+> You can view all collected metrics in the [Appendix](#appendix).
 
 ## Introducing Vilmo: Verifiable State Transitions and Sync without Merklization
 
@@ -86,6 +76,18 @@ Vilmo optimizes for large (100k+ key-values) batch writes by leveraging a collec
 ![Vilmo](https://patrickogrady.xyz/images/vryx-poc/vilmo.png)
 
 Vilmo compaction (when required) occurs during block execution and is synchronized across all nodes. The frequency of this compaction is tuneable (i.e. how much "useless" data can live in a log before cleanup), however, the timing of this compaction (during block execution) is not. This approach allows for a forthcoming implementation of state expiry and/or state rent to be applied during compaction (charging a fee to each key that is preserved during a rewrite). This fee would likely increase the larger the log file is to deter an attacker from purposely increasing the size of a single log file to increase the time compaction will take (Vilmo works best when log files are of uniform size). Exposing state compaction to the HyperSDK allows it to better charge for resource usage that is currently not accounted for in most blockchains (i.e. the cost of maintaining state on-disk).
+
+## Is This Another "Bajillion TPS" Gimmick?
+
+Anyone that has been around for more than a few days has seen a "TPS claim"...to be frank, why is this one any different?
+
+**Transparency:** When publishing the results of a throughput test, the circumstances and context are everything. 100k TPS on a single machine is very different than 50 machines or 500 machines. Verifying signatures and persisting state changes to disk dramatically impact results. 10M active accounts put a very different stress on a system than 100 active accounts. Any throughput test must be adequately specified to carry any weight and you've been presented with detailed information about the network topology, the hardware used by each node, and the actual transactions issued (to reiterate again, only signed transfers are used in this test).
+
+**Reproducibility:** Sharing an image of a throughput test or tweeting that it happened does not satisfy the burden of proof (or at least it doesn't in most industries). The code that is tested and the test itself should be available and reproducible by any observer on independent hardware. In the case of this setup, the code that was active on the devnet is available [here](https://github.com/ava-labs/hypersdk/pull/711) and the script that can be used to reproduce these results is available [here](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh).
+
+**Expressed Tradeoffs:** When something seems too good to be true, it probably is. When designing the HyperSDK (and Vryx + Vilmo), clear and "costly" tradeoffs were made to maximize throughput and minimize resource usage. Some of the more controversial tradeoffs include: (1) checksum-ing state instead of merklizing it, (2) requiring transactions to be committed before it is known whether they can be executed, and (3) charging fees for on-chain activity in 5 dimensions (bandwidth, compute, read, allocate, write). The road to best-in-class performance is not a set of "free" compromises and requires careful consideration of the available design space to produce a set of tradeoffs that appeal at a given throughput level.
+
+**Production Plausible:** When generating 
 
 ## Acknowledgements
 
