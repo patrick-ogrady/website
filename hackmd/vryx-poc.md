@@ -63,7 +63,7 @@ Anyone that has been around for more than a few days has seen a "TPS claim"...to
 
 **Reproducibility:** Sharing an image of a throughput test or tweeting that it happened does not satisfy the burden of proof (or at least it doesn't in most industries). The code that is tested and the test itself must be available and should be reproducible by any observer on independent hardware. In the case of this setup, the code that was active on the devnet is available [here](https://github.com/ava-labs/hypersdk/pull/711) and the script that can be used to reproduce these results is available [here](https://github.com/ava-labs/hypersdk/blob/dadbb8248d6b499eb38b14d6014a1e42a012e4d1/examples/morpheusvm/scripts/deploy.devnet.sh) (assuming you have an AWS account).
 
-**Tradeoffs:** There are unique trade-offs and novel techniques being applied here.
+**Expressed Tradeoffs:** Vryx, Vilmo, and/or the HyperSDK do not claim to be the best mechnaism for every possible workload. All of these systems make clear tradeoffs when optimizing their usage of available resources.
 
 ### Vryx: Fortifying Decoupled State Machine Replication
 
