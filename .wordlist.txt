@@ -108,3 +108,5 @@ TPS
 Vilmo
 Avax
 Buttolph
+Merklization
+liveness
