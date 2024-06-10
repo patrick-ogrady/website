@@ -110,3 +110,5 @@ Avax
 Buttolph
 Merklization
 liveness
+Validator
+Vena
