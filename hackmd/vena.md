@@ -221,7 +221,7 @@ graph TD
     C -.->B
 ```
 
-If a large number of aggregators are offline or byzantine, the aggregation committee assignment in a round may be "uncooperative" and it may not be possible to produce a notarization for any block at $h$ using aggregation committee broadcast. If a validator has not seen a notarization for some block (standard of dummy) at $h$ by $7∆$, it enters an all-to-all broadcast phase where it sends a vote for the dummy block to all other validators. This broadcast fallback does not require any aggregation committee reconfiguration, opting instead for all validators to "bail out" of a given configuration and try again at $h+1$.
+If a large number of aggregators are offline or byzantine, the aggregation committee assignment in a round may be "uncooperative" and it may not be possible to produce a notarization for any block at $h$ using aggregation committee broadcast. If a validator has not seen a notarization for some block (standard or dummy) at $h$ by $7∆$, it enters an all-to-all broadcast phase where it sends a vote for the dummy block to all other validators. This broadcast fallback does not require any aggregation committee reconfiguration, opting instead for all validators to "bail out" of a given configuration and try again at $h+1$.
 
 ```mermaid
 ---
