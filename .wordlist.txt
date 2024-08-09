@@ -116,3 +116,4 @@ Commonware
 commonwarexyz
 monorepo
 patrick
+commonware
