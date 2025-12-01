@@ -129,3 +129,4 @@ Merkle
 Minimmit
 arXiv
 Commonware's
+TEEs
